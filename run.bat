@@ -1,0 +1,1 @@
+"D:\Programs\QEMU\qemu-system-i386.exe" -kernel bin/kernel.elf
