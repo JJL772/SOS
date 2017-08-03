@@ -1,4 +1,4 @@
-; Starts the kernel up
+; Starts the kernel
 
 global _start
 extern kmain
@@ -27,6 +27,31 @@ section .text
         
         ;Call the C kernel
         call kmain
+
+		;test for error 
+		mov dword [0xB8000], 'K'
+		mov dword [0xB8001], 0x07
+		mov dword [0xB8002], 'E'
+		mov dword [0xB8003], 0x07
+		mov dword [0xB8004], 'R'
+		mov dword [0xB8005], 0x07
+		mov dword [0xB8006], 'N'
+		mov dword [0xB8007], 0x07
+		mov dword [0xB8008], 'E'
+		mov dword [0xB8009], 0x07
+		mov dword [0xB800A], 'L'
+		mov dword [0xB800B], 0x07
+		mov dword [0xB800C], ' '
+		mov dword [0xB800D], 0x07
+		mov dword [0xB800E], 'F'
+		mov dword [0xB800F], 0x07
+		mov dword [0xB8011], 'A'
+		mov dword [0xB8012], 0x07
+		mov dword [0xB8013], 'I'
+		mov dword [0xB8014], 0x07
+		mov dword [0xB8015], 'L'
+		mov dword [0xB8016], 0x07
+
 
         ;If we somehow exit from the C kernel, we'll just basically shutdown the computer because fuck you right?
         cli

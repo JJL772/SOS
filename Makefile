@@ -9,8 +9,8 @@ OBJ_OUT_ASM = intermediate/boot.o
 CPP_SRC =	$(wildcard src/kernel/*.cpp) \
 			$(wildcard src/drivers/*.cpp)\
 			$(wildcard src/kernel/screen/*.cpp)\
-			$(wildcard src/kernel/memory/.cpp) \
-			$(wildcard src/lib/*.cpp)
+			$(wildcard src/kernel/memory/*.cpp) \
+			$(wildcard src/lib/*.cpp) \
 			
 ASM_SRC =	$(wildcard src/kernel/*.asm) \
 			$(wildcard src/drivers/*.asm)

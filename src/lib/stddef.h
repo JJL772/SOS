@@ -9,6 +9,9 @@
 
 #pragma once
 
+/*
+Magical stuff!
+*/
 #define NULL 0
 #define NULL_SAFE nullptr
 
@@ -57,4 +60,10 @@ typedef int Int64;
 typedef unsigned int UInt64;
 typedef int int64;
 typedef unsigned int uint64;
+#endif
+
+#ifdef _64BITS_
+typedef unsigned long long uintptr_t;
+#else
+typedef unsigned int uintptr_t;
 #endif
