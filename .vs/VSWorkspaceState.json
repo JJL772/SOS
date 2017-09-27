@@ -3,8 +3,8 @@
     "",
     "\\src",
     "\\src\\kernel",
-    "\\src\\kernel\\memory",
     "\\src\\lib"
   ],
+  "SelectedNode": "\\src\\kernel\\os.h",
   "PreviewInSolutionExplorer": false
 }

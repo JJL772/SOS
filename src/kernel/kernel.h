@@ -9,6 +9,13 @@
 
 #define KERNEL extern "C"
 
-KERNEL void kmain(void);
+/*
+Base namespace of the kernel. This will contain various global variables such as a lookup
+table for allocated memory blocks, among other things
+*/
+namespace JOS
+{
 
-void InitializeKernel();
+}
+
+KERNEL void kmain(void);

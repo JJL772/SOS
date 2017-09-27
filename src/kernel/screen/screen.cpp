@@ -11,13 +11,17 @@
 //Starting position of the memory 0xB8000
 volatile char* memory_pos = (volatile char*)VID_MEM_START;
 
-void JOS::Screen::SetupScreen()
+//TODO: Optimize?
+void JOS::Screen::PutChar(uint16_t x, uint16_t y, char c)
 {
-    //*memory_pos = (char)0x01;
-    //*memory_pos + 1 = (char)0x07;
-    for(uint64_t i = 0; i < SCREEN_HEIGHT * SCREEN_WIDTH; i++)
-    {
-        *memory_pos++ = 0x01;
-        *memory_pos++ = 0x07;
-    }
+	uint32_t RealPos = VID_MEM_START + ((x * sizeof(char)) + ((y - 1) * sizeof(char)) - 2);
+	volatile char* Mem = (volatile char*)(RealPos);
+	*Mem = c;
+	Mem = (volatile char*)(RealPos + 1);
+	*Mem = (char)0x0;
+}
+
+void JOS::Screen::WriteString(const char* String)
+{
+
 }

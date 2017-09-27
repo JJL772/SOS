@@ -20,13 +20,13 @@ namespace JOS
 {
     namespace Screen
     {
-        static uint16_t PosX = 1;
-        static uint16_t PosY = 1;
-
+		static uint16_t ScreenPosX = 0;
+		static uint16_t ScreenPosY = 0;
+		static uint16_t ScreenColor = 0x0;
         void SetupScreen();
         void PutChar(uint16_t x, uint16_t y, char c);
         void WriteString(const char* str);
-        void SetScreenColor();
+        void SetScreenColor(uint16_t color);
         void SetCursorPos(uint16_t x, uint16_t y);
         void GetCursorPos(uint16_t& x, uint16_t& y);
         void ClearScreen();

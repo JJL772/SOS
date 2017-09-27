@@ -22,7 +22,7 @@ ASM_OBJ_OUT = 	$(ASM_SRC:.asm=.o)
 all:
 	nasm -f $(NASM_FORMAT) $(ASM_SRC) -o $(ASM_OBJ_OUT)
 	g++ -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -nostartfiles -nodefaultlibs $(CPP_SRC) -o $(OBJ_OUT)
-	ld -T link.ld -melf_i386  $(LD_PARAMS) $(OBJ_OUT) $(ASM_OBJ_OUT) -o $(KERNEL_OUT)
+	ld -T link.ld -melf_i386  $(LD_PARAMS) $(ASM_OBJ_OUT) $(OBJ_OUT) -o $(KERNEL_OUT)
 	cp $(KERNEL_OUT) $(KERNEL_ISO)
 	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A os -input-charset utf8 -quiet -boot-info-table -o os.iso iso
 	

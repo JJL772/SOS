@@ -12,15 +12,22 @@
 
 KERNEL void kmain(void)
 {
-	volatile char* m = (char*)0xB8000;
-	*m = 'H';
-	volatile char* f = (char*)0xB8001;
-	*f = (char)0x07;
+	/*
+	Clears the screen
+	*/
+	for (uint32_t pos = 0; pos < (80 * 25 * 2); pos += 2)
+	{
+		volatile char* Mem = (volatile char*)(0xB8000 + (pos));
+		*Mem = ' ';
+		Mem = (volatile char*)(0xB8000 + (pos - 1));
+		*Mem = 0x0;
+	}
 
-    InitializeKernel();
-}
+	//JOS::Screen::PutChar(1, 1, 'H');
 
-void InitializeKernel()
-{
-    JOS::Screen::SetupScreen();
+	//Create infinite loop because we have nothing better to do
+	while (true)
+	{
+
+	}
 }

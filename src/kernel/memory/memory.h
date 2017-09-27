@@ -9,15 +9,20 @@
 
 #include "../../lib/stdlib.h"
 #include "../../lib/stddef.h"
+#include "../structs.h"
 
 #define WRITE_MEMORY(addr, type, val) *(type*)addr = val
+
+//Sits at 16384 currently. Each entry in the list requires 2 bytes of memory
+#define MAX_MALLOC_SEGMENTS 16384
+
+
 
 /*
 Pointers to where the heap starts, and to where the first open memory block is.
 */
-//static STDLIB void* HeapStart;
-//static STDLIB void* HeapPtr;
-
+//static MemoryPointer_t HeapStart;
+//static MemoryBlock_t 
 static void InitializeMemory();
 
 /*
