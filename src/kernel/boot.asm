@@ -29,7 +29,8 @@ section .text
         call kmain
 
 		;test for error 
-		;mov dword [0xB8000], 'K'
+		mov dword [0xB8000], 'C'
+		mov dword [0xB8001], 0x07
 		;mov dword [0xB8001], 0x07
 		;mov dword [0xB8002], 'E'
 		;mov dword [0xB8003], 0x07

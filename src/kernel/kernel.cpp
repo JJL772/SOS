@@ -5,10 +5,8 @@
 // Version: 0.0.1-alpha
 // License:
 //=========================================================================//
-
-
 #include "kernel.h"
-#include "screen/screen.h"
+#include "main/screen.h"
 
 KERNEL void kmain(void)
 {
@@ -20,14 +18,20 @@ KERNEL void kmain(void)
 		volatile char* Mem = (volatile char*)(0xB8000 + (pos));
 		*Mem = ' ';
 		Mem = (volatile char*)(0xB8000 + (pos - 1));
-		*Mem = 0x0;
+		*Mem = 0x17;
 	}
 
-	//JOS::Screen::PutChar(1, 1, 'H');
+	SetScreenColor(0x17);
+	PutChar(1, 1, 'c');
 
 	//Create infinite loop because we have nothing better to do
 	while (true)
 	{
-
+		//la la la I dont care what you tell me to do!
 	}
+}
+
+KERNEL void kerror(EKernelError type)
+{
+
 }

@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\kernel",
+    "\\kernel\\asm",
+    "\\kernel\\main",
+    "\\lib"
+  ],
+  "SelectedNode": "\\lib\\intrin.h",
+  "PreviewInSolutionExplorer": false
+}

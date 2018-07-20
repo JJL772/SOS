@@ -1,1 +1,2 @@
 bash -c "make"
+PAUSE

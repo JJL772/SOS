@@ -3,8 +3,10 @@
     "",
     "\\src",
     "\\src\\kernel",
+    "\\src\\kernel\\asm",
+    "\\src\\kernel\\core",
     "\\src\\lib"
   ],
-  "SelectedNode": "\\src\\kernel\\os.h",
+  "SelectedNode": "\\src\\kernel\\asm\\math32.asm",
   "PreviewInSolutionExplorer": false
 }

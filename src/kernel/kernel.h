@@ -8,14 +8,16 @@
 #pragma once
 
 #define KERNEL extern "C"
+#define NULL 0
 
 /*
-Base namespace of the kernel. This will contain various global variables such as a lookup
-table for allocated memory blocks, among other things
+Defines how the kernel failed
 */
-namespace JOS
+typedef enum EKernelError
 {
-
-}
+	KERNEL_FAIL_GENERIC = 0x0,
+	KERNEL_PROCESS_DIED = 0x1,
+} EKernelError;
 
 KERNEL void kmain(void);
+KERNEL void kerror(EKernelError type);
