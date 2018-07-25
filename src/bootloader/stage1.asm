@@ -21,24 +21,39 @@ _start:
     ;        v-------v v-------v v-------v v-------v
     ;0x900 : 0000_0000_0000_0000_0000_1001_0000_0000
     ;limit = 64k
-    mov BYTE [ax+8],  0b00000000 ;First portion of base is empty
-    mov BYTE [ax+9], 0b11010000 ;G=1, B=1, AVL=1, limit firt 4 bits are empty
-    mov BYTE [ax+10], 0b10010011 ;P=1, DPL=0, E=0, W=1, A=1
-    mov BYTE [ax+11], 0b00000000 ;Base still empty
-    mov BYTE [ax+12], 0b00001001 ;Base again
-    mov BYTE [ax+13], 0b00000000 ;last part of base
-    mov BYTE [ax+14], 0b11111111 ;mid part of limit
-    mov BYTE [ax+15], 0b11111111 ;last part of limit
+	;We are just going to open up all our memory within the 20-bit address space
+
+	;Data segment, limit will be base+limit of 64k
+	; Base =	0000_0000_0000_0000_0111_1110_0000_0000
+	; Limit =	0000_0000_0000_0001_0111_1000_0000_0000
+    mov WORD [ax+8],  0b0000_0000_0001_0001 ;First portion of base is empty
+    mov WORD [ax+10], 0b1001_0011_0000_0000 ;P=1, DPL=0, E=0, W=1, A=1
+    mov WORD [ax+12], 0b0111_1110_0000_0000 ;Base again
+    mov WORD [ax+14], 0b0111_1000_0000_0000 ;mid part of limit
+
+	;Code segment now
+	; Base =	0000_0000_0000_0001_1000_0110_1010_0000
+	; Limit =	0000_0000_0000_|0010_1000_0000_1010_0000
+	mov WORD [ax+16], 0b0000_0000_0001_0010
+	mov WORD [ax+18], 0b1001_0000_0000_0001
+	mov WORD [ax+20], 0b1000_0110_1010_0000
+	mov WORD [ax+22], 0b1000_0000_1010_0000
 
     ;Load the GDT
     lgdt ax
 
-    ;Select the segment with a gdt selector
-    ;First 13 bits are the index of the table
-    ;next bit is the table index
-    ;final 2 bits are the requested privalege level
-    mov ds, 0b0000000000001011
-    ;We now have access to the segment
+	;Select the segments here
+    mov ds, 0b0000000000010011
+	mov es, 0b0000000000010011
+	mov fs, 0b0000000000010011
+	mov fs, 0b0000000000010011
+	mov gs, 0b0000000000010011
+	;put stack here for now
+	mov ss, 0b0000000000010011
+	;select code segment
+	mov cs, 0b0000000000011011
+
+
 
     ;Use bios disk interrupts (0x13) to get disk info
     mov ah, 08
@@ -49,6 +64,7 @@ _start:
     mov ah, 0x900
     mov BYTE [ah], ch
     mov BYTE [ah], cl
+
 
 
     ;Enable 32 bit protected mode
