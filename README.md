@@ -1,4 +1,6 @@
-# JOS
+# SOS
+Your computer will probably be yelling SOS once this OS starts up
+
 ## What the heck is this?
 I was bored and decided that I wanted to try and write my own operating system. So that's basically what this is.
 ## Should I use it?
