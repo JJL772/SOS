@@ -4,8 +4,11 @@
 ; processor
 ;=======================================
 
+;Entry point
 global _start
 
+;==================================
+;External symbols
 extern IVYBRIDGE_SETUP
 extern CANNONLAKE_SETUP
 extern COFFEELAKE_SETUP
@@ -23,6 +26,8 @@ extern PENTIUMM_SETUP
 extern P6_SETUP
 extern I486_SETUP
 extern I386_SETUP
+extern FPU_SETUP
+;==================================
 
 section .bss
 
@@ -53,27 +58,20 @@ section .text
 		mov DWORD [cpu_vendor_name], ebx
 		mov DWORD [cpu_vendor_name+4], ecx
 		mov DWORD [cpu_vendor_name+8], edx
-
-		mov eax, 1
-		cpuid
-		
-		mov DWORD [cpu_brand_index], ebx
-		mov DWORD [cpu_features], ecx
-		mov DWORD [cpu_features+4], edx
 		
 		mov eax, 7
 		mov ecx, 0
 		cpuid
 
-		mov DWORD [cpu_features+8], ebx
-		mov DWORD [cpu_features+12], ecx
-		mov DWORD [cpu_feautres+16], edx
+		mov DWORD [cpu_features+8], ebx ;extended_features1
+		mov DWORD [cpu_features+12], ecx ;extended_features2
+		mov DWORD [cpu_feautres+16], edx ;extended_features3
 
 		mov eax, 80000001h
 		cpuid
 
-		mov DWORD [cpu_features+20], ecx
-		mov DWORD [cpu_features+24], edx
+		mov DWORD [cpu_features+20], edx
+		mov DWORD [cpu_features+24], ecx
 
 		;Generates a unique value for each vendor
 		;Intel = [esp-8] = 1870622589
@@ -83,14 +81,35 @@ section .text
 		mov eax, [esp-4]
 		or eax, [cpu_vendor_name+4]
 		or eax, [cpu_vendor_name+8]
-		cmp eax, 1870622589
-		je .INTEL
+
+		;Quickly get the basic CPU features (this relative to a specific arch)
 		cmp eax, 1736408429
+		cmove eax, 80000001h
+		cmovne eax, 1
+
+		cpuid
+
+		mov [cpu_brand_index], ebx
+		mov DWORD [cpu_features], edx ;feature_bits1
+		mov DWORD [cpu_features+4], ecx ;feature_bits2
+
+		;Issue jmps to setup areas
+		cmp eax, 1870622589 ;Intel
+		cmove eax, 1
+		je .INTEL
+
+		cmp eax, 1736408429 ;AMD
+		cmove eax, 80000001h
 		je .AMD
-		cmp eax, 2003662701
+
+		cmp eax, 2003662701 ;VMWARE
+		cmove eax, 1
 		je .VMWARE
-		cmp eax, 2138795894
+
+		cmp eax, 2138795894 ;MSVPC
+		cmove eax, 1
 		je .MSVPC
+
 		jmp .GENERAL_SETUP
 
 	.INTEL:
@@ -158,7 +177,13 @@ section .text
 
 	.GENERAL_SETUP:
 		;Perform all setup tasks here
-
+		;FPU_SETUP(feature_bits1, feature_bits2, extended_features1, extended_features2, extended_features3)
+		push [cpu_features]
+		push [cpu_features+4]
+		push [cpu_features+8]
+		push [cpu_features+12]
+		push [cpu_features+16]
+		call FPU_SETUP
 
 
 		
