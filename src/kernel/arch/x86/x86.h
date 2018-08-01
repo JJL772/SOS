@@ -24,11 +24,11 @@ typedef struct CR0
 	int TS : 1;
 	int ET : 1;
 	int NE : 1;
-	int Reserved1 : 9;
+	int _r1 : 9;
 	int WP : 1;
-	int Reserved2 : 1;
+	int _r2 : 1;
 	int AM : 1;
-	int Reserved3 : 11;
+	int _r3 : 11;
 	int NW : 1;
 	int CD : 1;
 	int PG : 1;
@@ -36,7 +36,7 @@ typedef struct CR0
 
 typedef struct CR1
 {
-	int reserved : 32;
+	int _r1 : 32;
 } CR1_t;
 
 typedef struct CR2
@@ -46,17 +46,38 @@ typedef struct CR2
 
 typedef struct CR3
 {
-	int Reserved1 : 3;
+	int _r1 : 3;
 	int PWT : 1;
 	int PCD : 1;
-	int Reserved2 : 6;
-	int PDB : 19;
+	int _r2 : 7;
+	int PDB : 20;
 } CR3_t;
 
 typedef struct CR4
 {
-
+	int VME : 1;
+	int PVI : 1;
+	int TSD : 1;
+	int DE : 1;
+	int PSE : 1;
+	int PAE : 1;
+	int MCE : 1;
+	int PGE : 1;
+	int PCE : 1;
+	int OSFXSR : 1;
+	int OSXMMEXCPT : 1;
+	int _r1 : 21;
 } CR4_t;
+
+typedef struct CR5_7
+{
+	int _r1 : 32;
+};
+
+typedef CR5_7 CR5_t;
+typedef CR5_7 CR6_t;
+typedef CR5_7 CR7_t;
+
 
 
 
