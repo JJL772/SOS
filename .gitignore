@@ -6,3 +6,7 @@
 .vs/JOS/v15/Browse.VC.opendb
 *.sqlite
 .vs/VSWorkspaceState.json
+*.o
+*.gch
+*.elf
+*.bin

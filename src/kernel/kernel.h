@@ -1,23 +1,13 @@
 //=========================================================================//
 // Name: kernel.h
-// Purpose: Defines base methods for use in the kernel 
+// Purpose: 
 // Authors: Jeremy L.
 // Version: 0.0.1-alpha
 // License: None
 //=========================================================================//
-#pragma once
+#ifndef _KERNEL_H
+#define _KERNEL_H
 
-#define KERNEL extern "C"
-#define NULL 0
 
-/*
-Defines how the kernel failed
-*/
-typedef enum EKernelError
-{
-	KERNEL_FAIL_GENERIC = 0x0,
-	KERNEL_PROCESS_DIED = 0x1,
-} EKernelError;
 
-KERNEL void kmain(void);
-KERNEL void kerror(EKernelError type);
+#endif //_KERNEL_H
