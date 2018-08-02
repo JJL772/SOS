@@ -37,6 +37,10 @@ typedef struct
 
 } BadOpcodeFault_t;
 
+typedef struct
+{
+
+} SegmentationFault_t;
 typedef void(*os_err_handler_ptr)(int, void*);
 
 void HandleError(int err, void* err_info);
