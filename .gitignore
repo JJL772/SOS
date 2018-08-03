@@ -11,3 +11,4 @@
 *.elf
 *.bin
 *.iso
+__pycache__
