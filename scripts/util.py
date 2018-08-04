@@ -4,6 +4,8 @@ import sys
 import os
 import io
 import pathlib
+import settings
+
 from pathlib import Path
 
 python_version_major = 3
@@ -36,8 +38,9 @@ def get_distros(dist, type):
 
     return ret
 
-def create_folders():
-    for dir in required_dirs:
+def create_folders(quiet=False):
+    for dir in settings.required_dirs:
         if not os.path.exists(dir):
-            print("Creating folder" + dir + "...")
+            if not quiet:
+                print("Creating folder " + dir + "...")
             os.mkdir(dir)

@@ -10,7 +10,11 @@ if(sys.version_info[0] < 3):
 import subprocess
 import errno
 import settings
+import pathlib
 import os
+import util
+
+from pathlib import Path
 from subprocess import DEVNULL
 
 failed_deps = list()
@@ -60,3 +64,17 @@ if len(failed_deps) > 0:
     print("If any packages that have not been found are on the list, please install them and check that settings.py contains the proper command definitions.")
 else:
     print("All required packages appear to be installed!")
+
+print("\nChecking if folders exist...")
+
+for dir in settings.required_dirs:
+    if Path(dir).exists():
+        print(dir)
+        print("\t\t....OK")
+    else:
+        print(dir)
+        print("\t\t....MISSING")
+
+util.create_folders()
+
+print("\n\tFinished setup!")
