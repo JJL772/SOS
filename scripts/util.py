@@ -44,3 +44,7 @@ def create_folders(quiet=False):
             if not quiet:
                 print("Creating folder " + dir + "...")
             os.mkdir(dir)
+
+#Appends a block of text to the beginning of a file
+def append_to_file():
+    exit()
