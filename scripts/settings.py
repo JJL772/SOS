@@ -38,3 +38,23 @@ qemu_mips_command = "qemu-mips"
 
 #QEMU-x86-64 command
 qemu_x64_command = "qemu-x86_64"
+
+#Directories to be created during setup
+required_dirs = [
+    "build/",
+    "build/x86/",
+    "build/x86/debug/",
+    "build/x86/release/",
+    "build/x86-64/",
+    "build/x86-64/debug/",
+    "build/x86-64/release/",
+    "build/arm/",
+    "build/arm/debug/",
+    "build/arm/release",
+    "intermediate/",
+    "intermediate/x86/",
+    "intermediate/x86-64/",
+    "intermediate/arm/",
+]
+
+kernel_link_script = "scripts/link/kernel/kernel.ld"
