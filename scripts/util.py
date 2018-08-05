@@ -6,7 +6,7 @@ import io
 import pathlib
 import settings
 
-from pathlib import Path
+from pathlib2 import Path
 
 python_version_major = 3
 python_version_minor = 0
@@ -46,5 +46,33 @@ def create_folders(quiet=False):
             os.mkdir(dir)
 
 #Appends a block of text to the beginning of a file
-def append_to_file():
-    exit()
+def append_to_file(file, text):
+    try:
+        fs = open(file, mod='rw')
+    except:
+        raise OSError()
+    if fs == None:
+        return None
+
+
+def get_all_text(file):
+    fs = open(file, mode='r')
+    if fs == None:
+        return ""
+    out_buf = ""
+    for line in fs:
+        out_buf += line
+        out_buf += '\n'
+    return out_buf
+
+#Returns all the files in a directory, includes dub-dirs
+def list_files(dir):
+    ret = list()
+    if not Path(dir).exists() or not Path(dir).is_dir():
+        return ret
+    for file in os.listdir(dir):
+        if Path(file).is_file():
+            ret.append(file)
+        elif Path(file).is_dir():
+            ret.extend(str(dir)+file)
+    return ret
