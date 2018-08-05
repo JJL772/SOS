@@ -1,0 +1,7 @@
+;==========================================;
+; Name: %NAME%
+; Contributors:
+; Description:
+; License: None
+; Date of Creation: <%MONTH%-%DAY%-%YEAR%> %HOUR%:%MINUTE%
+;==========================================;

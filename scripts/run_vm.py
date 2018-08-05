@@ -61,4 +61,4 @@ for dis in distros:
 inp = input()
 inp = int(inp)
 
-subprocess.call([settings.qemu_i386_command, "-boot d", "-cdrom", distros[inp]])
+subprocess.call([cmd, "-boot d", "-cdrom", distros[inp]])

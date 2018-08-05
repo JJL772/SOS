@@ -58,3 +58,7 @@ required_dirs = [
 ]
 
 kernel_link_script = "scripts/link/kernel/kernel.ld"
+
+kernel_source_dir = "src/kernel/"
+
+bootloader_source_dir = "src/bootloader/"
