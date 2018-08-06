@@ -12,3 +12,4 @@
 *.bin
 *.iso
 __pycache__
+*.pyc
