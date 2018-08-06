@@ -76,7 +76,7 @@ def list_files(dir):
         if Path(file).is_file():
             ret.append(file)
         elif Path(file).is_dir():
-            ret.extend(str(dir)+"/"+file)
+            ret.extend(list_files(str(dir)+"/"+file))
     return ret
 
 def read_all_lines(file):
