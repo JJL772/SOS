@@ -1,12 +1,16 @@
 /*
  *
  * int.h
- * 
+ *
  * Defines interrupt procedures to be added to the IDT
  *
  */
 
 
+#ifndef _INT_H
+#define _INT_H
+
+//PROC(unsigned EFLAGS, unsigned short CS, unsigned EIP, int ERR_CODE)
 typedef void(*interrupt_proc)(unsigned int, unsigned short, unsigned int, int);
 
 //Interrupt procedures
@@ -26,3 +30,7 @@ interrupt_proc TS_INT;
 interrupt_proc UD_INT;
 interrupt_proc VE_INT;
 interrupt_proc XM_INT;
+interrupt_proc SYS_INT;
+
+
+#endif //_INT_H

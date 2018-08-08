@@ -62,3 +62,12 @@ kernel_link_script = "scripts/link/kernel/kernel.ld"
 kernel_source_dir = "src/kernel/"
 
 bootloader_source_dir = "src/bootloader/"
+
+#
+#Kernel settings
+#
+
+kernel_include_dirs = [
+	"src/kernel/",
+	"src/kernel/lib",
+]
