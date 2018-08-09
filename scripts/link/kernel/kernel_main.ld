@@ -68,7 +68,7 @@ SECTIONS {
 	/* 128 kb */
 
 	/* Kernel stack, 16kb */
-	.data BLOCK(16K) : ALIGN(16K)
+	.bss BLOCK(16K) : ALIGN(16K)
 	{
 		*(.stack)
 	} = 0x0 /* Unused area zeroed out */
