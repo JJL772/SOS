@@ -3,6 +3,7 @@
 
 de.c
 
+Divide error
 
 */
 #include "int.h"

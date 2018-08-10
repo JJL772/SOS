@@ -24,6 +24,13 @@ Defines low-level code that can be used in C and stuff
 #define INTERRUPT_VECTOR __attribute__((section(".inthandler")))
 #define INTERRUPT_DATA __attribute__((section(".intdata")))
 
+/* Macros for loading stuff */
+#define X86_LOAD_CR0(cr0)
+#define X86_LOAD_CR1(cr1)
+#define X86_LOAD_CR2(cr2)
+#define X86_LOAD_CR3(cr3)
+#define X86_LOAD_CR4(cr4)
+
 typedef struct CR0
 {
 	int PE : 1;
@@ -116,6 +123,53 @@ typedef unsigned short DS_t;
 typedef unsigned short ES_t;
 typedef unsigned short FS_t;
 typedef unsigned short GS_t;
+
+typedef struct
+{
+	int EXT : 1;
+	int IDT : 1;
+	int TI : 1;
+	int SELECTOR : 29;
+} idt_error_t;
+
+typedef struct
+{
+	int _r1 : 16;
+	int TSS_SELECTOR : 16;
+	int _r2 : 8;
+	int _r3 : 5;
+	int DPL : 2;
+	int P : 1;
+	int _r4 : 16;
+} idt_task_gate_t;
+
+typedef struct
+{
+	int OFFSET1 : 16;
+	int SEG_SELECTOR : 16;
+	int _r1 : 4;
+	int _r2 : 3;
+	int _r3 : 3;
+	int D : 1;
+	int _r4 : 1;
+	int DPL : 2;
+	int P : 1;
+	int OFFSET2 : 16;
+} idt_interrupt_gate_t;
+
+typedef struct
+{
+	int OFFSET1 : 16;
+	int SEG_SELECTOR : 16;
+	int _r1 : 4;
+	int _r2 : 3;
+	int _r3 : 3;
+	int D : 1;
+	int _r4 : 1;
+	int DPL : 2;
+	int P : 1;
+	int OFFSET2 : 16;
+} idt_trap_gate_t;
 
 void LoadCR0(CR0_t cr0);
 void LoadCR1(CR1_t cr1);
