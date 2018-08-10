@@ -1,8 +1,9 @@
 ;=======================================
 ; boot.asm
-; boots the computer and sets up the 
+; boots the computer and sets up the
 ; processor
 ;=======================================
+[BITS 32]
 
 ;Entry point
 global _start
@@ -29,27 +30,28 @@ extern I386_SETUP
 extern FPU_SETUP
 ;==================================
 
-section .bss
+section .stack
 
-	;4kb stack for simple calls to and from C and other assembly instructions
+	;16kb stack for simple calls to and from C and other assembly instructions
 	stack_bottom:
-		resb 4096
+		resb 16384
 	stack_top:
 
+section .bootbss
 	cpu_vendor_name: resb 12
 	cpu_brand_index: resb 1
 	cpu_features: resb 28 ;Array of processor features, 28 bytes
 
-section .data
+;section .data
 
-section .text
+section .boot
 	align 4
 
 
-	_start:
+	_boot:
 		;setup the stack
 		mov esp, stack_top
-	
+
 		;Gather various CPUID info
 		mov eax, 0
 		cpuid
@@ -58,7 +60,7 @@ section .text
 		mov DWORD [cpu_vendor_name], ebx
 		mov DWORD [cpu_vendor_name+4], ecx
 		mov DWORD [cpu_vendor_name+8], edx
-		
+
 		mov eax, 7
 		mov ecx, 0
 		cpuid
@@ -113,7 +115,7 @@ section .text
 		jmp .GENERAL_SETUP
 
 	.INTEL:
-		
+
 	.CANNONLAKE:
 		call CANNONLAKE_SETUP
 		jmp .GENERAL_SETUP
@@ -166,7 +168,7 @@ section .text
 		call I386_SETUP
 		jmp .GENERAL_SETUP
 
-		
+
 	.AMD:
 		jmp .GENERAL_SETUP
 	.VMWARE:
@@ -186,7 +188,7 @@ section .text
 		call FPU_SETUP
 
 
-		
+
 	_EnableAVX512:
 		;Nothing
 

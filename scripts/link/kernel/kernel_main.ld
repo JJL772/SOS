@@ -52,6 +52,7 @@ SECTIONS {
 	/* Main kernel initialized data section, 16kb */
 	.bss BLOCK(16K) : ALIGN(16K)
 	{
+		*(.intdata)
 		*(COMMON)
 		*(.bss)
 	} = 0x0 /* Unused area zeroed out */

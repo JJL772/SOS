@@ -1,5 +1,7 @@
 ;Setup for numerous intel chips
 
+[BITS 32]
+
 global IVYBRIDGE_SETUP
 global CANNONLAKE_SETUP
 global COFFEELAKE_SETUP
@@ -18,7 +20,7 @@ global P6_SETUP
 global I486_SETUP
 global I386_SETUP
 
-section .text
+section .boot
 
 	IVYBRIDGE_SETUP:
 		push ebp
@@ -73,7 +75,7 @@ section .text
 	BROADWELL_SETUP:
 		push ebp
 		mov esp, ebp
-		
+
 		;Broadwell setup code here
 		nop
 

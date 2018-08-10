@@ -9,12 +9,20 @@ Defines low-level code that can be used in C and stuff
 #ifndef _x86_H
 #define _x86_H
 
+//Included from high kernel
+#include "../../lib/types.h"
 
-void LoadCR0(CR0_t cr0);
-void LoadCR1(CR1_t cr1);
-void LoadCR2(CR2_t cr2);
-void LoadCR3(CR3_t cr3);
-void LoadCR4(CR4_t cr4);
+//High kernel wont be able to use these structures
+#ifndef _HIGH_KERNEL_
+
+#define BOOT_PROC __attribute__((section(".boot")))
+#define BOOT_DATA __attribute__((section(".bootdata")))
+#define BOOT_BSS __attribute__((section(".bootbss")))
+#define KERNEL __attribute__((section(".kernel")))
+#define KERNEL_DATA __attribute__((section(".data")))
+#define KERNEL_BSS __attribute__((section(".kernelbss")))
+#define INTERRUPT_VECTOR __attribute__((section(".inthandler")))
+#define INTERRUPT_DATA __attribute__((section(".intdata")))
 
 typedef struct CR0
 {
@@ -72,15 +80,50 @@ typedef struct CR4
 typedef struct CR5_7
 {
 	int _r1 : 32;
-};
+}CR5_7_t;
 
-typedef CR5_7 CR5_t;
-typedef CR5_7 CR6_t;
-typedef CR5_7 CR7_t;
+typedef struct
+{
+
+} task_descriptor_t;
+
+typedef CR5_7_t CR5_t;
+typedef CR5_7_t CR6_t;
+typedef CR5_7_t CR7_t;
+
+typedef unsigned char AL_t;
+typedef unsigned char AH_t;
+typedef unsigned char BL_t;
+typedef unsigned char BH_t;
+typedef unsigned char CL_t;
+typedef unsigned char CH_t;
+typedef unsigned char DL_t;
+typedef unsigned char DH_t;
+typedef unsigned char BPL_t;
+typedef unsigned char SIL_t;
+typedef unsigned char DIL_t;
+typedef unsigned char SPL_t;
+typedef unsigned int EAX_t;
+typedef unsigned int EBX_t;
+typedef unsigned int ECX_t;
+typedef unsigned int EDX_t;
+typedef unsigned int ESP_t;
+typedef unsigned int EDI_t;
+typedef unsigned int EIP_t;
+typedef unsigned int EBP_t;
+typedef unsigned short CS_t;
+typedef unsigned short DS_t;
+typedef unsigned short ES_t;
+typedef unsigned short FS_t;
+typedef unsigned short GS_t;
+
+void LoadCR0(CR0_t cr0);
+void LoadCR1(CR1_t cr1);
+void LoadCR2(CR2_t cr2);
+void LoadCR3(CR3_t cr3);
+void LoadCR4(CR4_t cr4);
 
 
-
-
-
+#endif //_HIGH_KERNEL_
 
 #endif //_x86_H

@@ -4,11 +4,12 @@
 ; Desc: Handles the setup of the
 ; x87 FPU
 ;================================
+[BITS 32]
 
 ;Exported functions
 global FPU_SETUP
 
-section .text
+section .boot
 
 	;FPU_SETUP(feature_bits1, feature_bits2, extended_features1, extended_features2, extended_features3)
 	FPU_SETUP:

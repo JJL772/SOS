@@ -3,8 +3,7 @@
 [BITS 32]
 
 global EnablePaging
-	
-section .text
-	
+
+section .boot
+
 	EnablePaging:
-		

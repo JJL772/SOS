@@ -15,8 +15,7 @@ Handles system calls
 #define SYS_CALL_NOP 0
 #define SYS_CALL_EXIT 1
 #define SYS_CALL_WRITE 2
-
-
+#define SYS_CALL_READ 3
 
 //
 // fire_system_call(uint32_t call_code, pid_t pid, void* call_info)
