@@ -17,7 +17,7 @@ SECTIONS {
 	.text BLOCK(8K) : ALIGN(8K)
 	{
 		*(.boot)
-	} = 0x6690 /* Fill remaining space with NOP instructions (Opcode = 0x6690) */
+	} = 0x90 /* Fill remaining space with NOP instructions (Opcode = 0x6690) */
 
 	/* Boot data block, 4kb */
 	.data BLOCK(4k) : ALIGN(4K)
@@ -37,7 +37,7 @@ SECTIONS {
 	.text BLOCK(16k) : ALIGN(16k)
 	{
 		*(.inthandler)
-	} = 0x6690 /* Fill remaining space with NOP instructions (Opcode = 0x6690) */
+	} = 0x90 /* Fill remaining space with NOP instructions (Opcode = 0x6690) */
 
 	/* 32 kb */
 
@@ -64,7 +64,7 @@ SECTIONS {
 	{
 		*(.text)
 		*(.kernel)
-	} = 0x6690 /* Fill remaining space with NOP instructions (Opcode = 0x6690) */
+	} = 0x90 /* Fill remaining space with NOP instructions (Opcode = 0x6690) */
 
 	/* 128 kb */
 
@@ -78,7 +78,7 @@ SECTIONS {
 	.data BLOCK(64K) : ALIGN(64K)
 	{
 		*(.data)
-	}
+	} = 0x0
 
 	.bss BLOCK(64K) : ALIGN(64K)
 	{
