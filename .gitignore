@@ -13,3 +13,4 @@
 *.iso
 __pycache__
 *.pyc
+scripts/test.py	
