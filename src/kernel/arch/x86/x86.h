@@ -89,11 +89,6 @@ struct CR5_7_t
 	int _r1 : 32;
 };
 
-struct task_descriptor_t
-{
-
-};
-
 struct BYTE_REG
 {
 	uint8_t contents;
@@ -172,6 +167,132 @@ typedef unsigned short DS_t;
 typedef unsigned short ES_t;
 typedef unsigned short FS_t;
 typedef unsigned short GS_t;
+
+/*
+
+
+
+Task structures
+
+
+
+*/
+
+
+//
+// TASK DESCRIPTOR DEFINITION/FUNCTIONS
+//
+struct task_descriptor_t
+{
+	BYTE 	base_high_1		:	7;
+	BYTE 	G				:	1;
+	BYTE 	_r1				:	2;
+	BYTE 	AVL				:	1;
+	BYTE 	limit_high		:	4;
+	BYTE	P 				:	1;
+	BYTE 	DPL 			:	2;
+	BYTE 	_r2				:	1;
+	BYTE 	TYPE 			:	4;
+	BYTE 	base_high_2		:	8;
+	WORD 	base_low		:	16;
+	WORD 	limit_low		:	16;
+};
+
+task_descriptor_t INIT_TASK_DESCRIPTOR(task_descriptor_t& desc)
+{
+	((QWORD)desc) = 0;
+	*(((BYTE*)desc) + 5) |= 0b10010000;
+}
+
+//
+// TASK GATE DESCRIPTOR DEFINITION/FUNCTIONS
+//
+struct task_gate_descriptor_t
+{
+	WORD 	_r1				:	16;
+	BYTE 	P 				:	1;
+	BYTE 	DPL 			:	2;
+	BYTE 	_r2				:	1;
+	BYTE 	_r3				: 	4;
+	BYTE 	_r4				:	8;
+	WORD 	tss_sel 		:	16;
+	WORD 	_r5				:	16;
+};
+
+task_gate_descriptor_t INIT_TASK_GATE_DESCRIPTOR(task_gate_descriptor_t& desc)
+{
+	((QWORD)desc) = 0;
+	*(((BYTE*)desc) + 5) |= 0b10100000;
+}
+
+struct task_state_segment_16_t
+{
+	WORD 	ldt_sel;
+	WORD 	DS;
+	WORD 	SS;
+	WORD 	CS;
+	WORD 	ES;
+	WORD 	DI;
+	WORD 	SI;
+	WORD	BP;
+	WORD 	SP;
+	WORD 	BX;
+	WORD 	DX;
+	WORD 	CX;
+	WORD 	AX;
+	WORD 	FLAGS;
+	WORD 	IP;
+	WORD 	SS2;
+	WORD 	SP2;
+	WORD 	SS1;
+	WORD 	SP1;
+	WORD 	SS0;
+	WORD 	SP0;
+	WORD 	prev_lnk;
+};
+
+struct task_state_segment_t
+{
+	WORD 	io_map;
+	WORD 	_r1 : 	15;
+	WORD 	T 	:	1;
+	WORD	_r2;
+	WORD	ldt_sel;
+	WORD 	_r3;
+	WORD 	GS;
+	WORD	_r4;
+	WORD 	FS;
+	WORD 	_r5;
+	WORD 	DS;
+	WORD 	_r6;
+	WORD 	SS;
+	WORD 	_r7;
+	WORD 	CS;
+	WORD 	_r8;
+	WORD 	ES;
+	DWORD 	EDI;
+	DWORD 	ESI;
+	DWORD 	EBP;
+	DWORD 	ESP;
+	DWORD 	EBX;
+	DWORD 	EDX;
+	DWORD 	ECX;
+	DWORD 	EAX;
+	DWORD 	EFLAGS;
+	DWORD 	EIP;
+	DWORD 	CR3;
+	WORD 	_r9;
+	WORD 	SS2;
+	DWORD 	ESP2;
+	WORD 	_r10;
+	WORD 	SS1;
+	DWORD 	ESP1;
+	WORD 	_r11;
+	WORD 	SS0;
+	DWORD 	ESP0;
+	WORD 	_r12;
+	WORD 	prev_lnk;
+};
 
 struct EFLAGS_t
 {

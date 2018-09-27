@@ -17,6 +17,15 @@ typedef unsigned int uint32_t;
 typedef long long int64_t;
 typedef unsigned long long uint64_t;
 
+typedef char BYTE;
+typedef unsigned char UBYTE;
+typedef short WORD;
+typedef unsigned short UWORD;
+typedef int DWORD;
+typedef unsigned int UDWORD;
+typedef long long QWORD;
+typedef unsigned long long UQWORD;
+
 //Process ids
 typedef unsigned int pid_t;
 
