@@ -15,14 +15,14 @@ Defines low-level code that can be used in C and stuff
 //High kernel wont be able to use these structures
 #ifndef _HIGH_KERNEL_
 
-#define BOOT_PROC __attribute__((section(".boot")))
-#define BOOT_DATA __attribute__((section(".bootdata")))
-#define BOOT_BSS __attribute__((section(".bootbss")))
-#define KERNEL __attribute__((section(".kernel")))
-#define KERNEL_DATA __attribute__((section(".data")))
-#define KERNEL_BSS __attribute__((section(".kernelbss")))
-#define INTERRUPT_VECTOR __attribute__((section(".inthandler")))
-#define INTERRUPT_DATA __attribute__((section(".intdata")))
+#define BOOT_PROC 			__attribute__((section(".boot")))
+#define BOOT_DATA 			__attribute__((section(".bootdata")))
+#define BOOT_BSS 			__attribute__((section(".bootbss")))
+#define KERNEL 				__attribute__((section(".kernel")))
+#define KERNEL_DATA 		__attribute__((section(".data")))
+#define KERNEL_BSS 			__attribute__((section(".kernelbss")))
+#define INTERRUPT_VECTOR 	__attribute__((section(".inthandler")))
+#define INTERRUPT_DATA 		__attribute__((section(".intdata")))
 
 /* Macros for loading stuff */
 #define X86_LOAD_CR0(cr0)
