@@ -227,28 +227,28 @@ task_gate_descriptor_t INIT_TASK_GATE_DESCRIPTOR(task_gate_descriptor_t& desc)
 
 struct task_state_segment_16_t
 {
-	WORD 	ldt_sel;
-	WORD 	DS;
-	WORD 	SS;
-	WORD 	CS;
-	WORD 	ES;
-	WORD 	DI;
-	WORD 	SI;
-	WORD	BP;
-	WORD 	SP;
-	WORD 	BX;
-	WORD 	DX;
-	WORD 	CX;
-	WORD 	AX;
-	WORD 	FLAGS;
-	WORD 	IP;
-	WORD 	SS2;
-	WORD 	SP2;
-	WORD 	SS1;
-	WORD 	SP1;
-	WORD 	SS0;
-	WORD 	SP0;
 	WORD 	prev_lnk;
+	WORD 	SP0;
+	WORD 	SS0;
+	WORD 	SP1;
+	WORD 	SS1;
+	WORD 	SP2;
+	WORD 	SS2;
+	WORD 	IP;
+	WORD 	FLAGS;
+	WORD 	AX;
+	WORD 	CX;
+	WORD 	DX;
+	WORD 	BX;
+	WORD 	SP;
+	WORD	BP;
+	WORD 	SI;
+	WORD 	DI;
+	WORD 	ES;
+	WORD 	CS;
+	WORD 	SS;
+	WORD 	DS;
+	WORD 	ldt_sel;
 };
 
 struct task_state_segment_t
