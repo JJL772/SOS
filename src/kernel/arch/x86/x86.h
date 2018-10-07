@@ -169,13 +169,13 @@ typedef unsigned short FS_t;
 typedef unsigned short GS_t;
 
 /*
-
+================================================================
 
 
 Task structures
 
 
-
+================================================================
 */
 
 
@@ -225,6 +225,9 @@ task_gate_descriptor_t INIT_TASK_GATE_DESCRIPTOR(task_gate_descriptor_t& desc)
 	*(((BYTE*)desc) + 5) |= 0b10100000;
 }
 
+//
+// 16-bit TSS, for compat with virtual 8086 mode
+//
 struct task_state_segment_16_t
 {
 	WORD 	prev_lnk;
@@ -251,6 +254,9 @@ struct task_state_segment_16_t
 	WORD 	ldt_sel;
 };
 
+//
+// 32-bit TSS
+//
 struct task_state_segment_t
 {
 	WORD 	io_map;
@@ -294,6 +300,19 @@ struct task_state_segment_t
 	WORD 	prev_lnk;
 };
 
+/*
+================================================================
+
+
+END Task structures
+
+
+================================================================
+*/
+
+//
+// EFLAGS register
+//
 struct EFLAGS_t
 {
 	uint8_t		CF	:	1;

@@ -5,6 +5,7 @@ task.h
 
 Defines task managment stuff
 
+WARNING: Internal structure, do not expose to usermode applications
 
 */
 
@@ -12,10 +13,11 @@ Defines task managment stuff
 #define _TASK_H
 
 #include "../../../lib/types.h"
+#include "../x86.h"
 
-typedef struct
+typedef struct task_t
 {
 
-} task_t;
+};
 
 #endif //_TASk_H
