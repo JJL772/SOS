@@ -42,7 +42,9 @@ section .bootbss
 	cpu_brand_index: resb 1
 	cpu_features: resb 28 ;Array of processor features, 28 bytes
 
-;section .data
+section .bss
+	cpu_features: 	resb 	20 	;New array of processor features, 20 bytes
+	cpu_vendor:		resb	4	;CPU vendor, 32-bit enum
 
 section .boot
 	align 4
@@ -52,15 +54,73 @@ section .boot
 		;setup the stack
 		mov esp, stack_top
 
+		xor eax, eax
+
 		;Gather various CPUID info
 		mov eax, 0
 		cpuid
 
+		;Get vendor name
 		mov DWORD [esp-4], ebx
-		mov DWORD [cpu_vendor_name], ebx
-		mov DWORD [cpu_vendor_name+4], ecx
-		mov DWORD [cpu_vendor_name+8], edx
+		mov DWORD [esp-8], ecx
+		mov DWORD [esp-12], edx
 
+		;Form unique signature for CPU vendors
+		or [esp-4], [esp-8]
+		or [esp-4], [esp-12]
+
+		;Compare and set cpu_vendor, 32-bit enum
+
+		;INTEL
+		cmp [esp-4], 0x7d6f7f6f
+		cmove [cpu_vendor], 0
+		
+		;AMD1
+		cmp [esp-4], 0x7d776f77
+		cmove [cpu_vendor], 1
+
+		;AMD2
+		cmp [esp-4], 0x6d7d7f67
+		cmove [cpu_vendor], 1
+
+		;CENTAUR
+		cmp [esp-4], 0x7f7e7563
+		cmove [cpu_vendor], 2
+
+		;CYRIX
+		cmp [esp-4], 0x7f7f7d7f
+		cmove [cpu_vendor], 3
+
+		;HYGON
+		cmp [esp-4], 0x6f6f7f7f
+		cmove [cpu_vendor], 4
+
+		;TRANSMETA
+		cmp [esp-4], 0x7f757f77
+		cmove [cpu_vendor], 5
+
+		;TRANSMETA AGAIN
+		cmp [esp-4], 0x777f7f6f
+		cmove [cpu_vendor], 5
+
+		;NATIONAL SEMICONDUCTOR
+		cmp [esp-4], 0x7f7f6f67
+		cmove [cpu_vendor], 6
+
+		;NEXGEN
+		cmp [esp-4], 0x7f7d7f6f
+		cmove [cpu_vendor], 7
+
+		;RISE 
+		cmp [esp-4], 0x65736952
+		cmove [cpu_vendor], 8
+
+		;SIS 
+		cmp [esp-4], 0x20536953
+		cmove [cpu_vendor], 9
+
+		;Implement later. yea.
+		
 		mov eax, 7
 		mov ecx, 0
 		cpuid

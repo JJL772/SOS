@@ -55,6 +55,7 @@ SECTIONS {
 		*(.intdata)
 		*(COMMON)
 		*(.bss)
+		*(.kernelbss)
 	} = 0x0 /* Unused area zeroed out */
 
 	/* 64 kb */
@@ -85,5 +86,4 @@ SECTIONS {
 		*(.bss)
 	} = 0x0
 	*/
-
 }

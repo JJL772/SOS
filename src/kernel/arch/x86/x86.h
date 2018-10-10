@@ -394,27 +394,27 @@ void LoadCR4(CR4_t cr4);
 
 typedef enum
 {
-	VENDOR_INTEL = 0,
-	VENDOR_AMD,
-	VENDOR_CENTAUR,
-	VENDOR_CYRIX,
-	VENDOR_HYGON,
-	VENDOR_TRANSMETA,
-	VENDOR_NATIONALSEMI,
-	VENDOR_NEXGEN,
-	VENDOR_RISE,
-	VENDOR_SIS,
-	VENDOR_UMC,
-	VENDOR_VIA,
-	VENDOR_VORTEX,
-	VENDOR_KVM,
-	VENDOR_BHYVE,
-	VENDOR_HYPERV,
-	VENDOR_PARALLELS,
-	VENDOR_VMWARE,
-	VENDOR_XEN,
-	VENDOR_UNSPECIFIED,
-	VENDOR_SIZE,
+	VENDOR_INTEL 			= 	0,
+	VENDOR_AMD				=	1,
+	VENDOR_CENTAUR			=	2,
+	VENDOR_CYRIX			=	3,
+	VENDOR_HYGON			=	4,
+	VENDOR_TRANSMETA		=	5,
+	VENDOR_NATIONALSEMI		=	6,
+	VENDOR_NEXGEN			=	7,
+	VENDOR_RISE				=	8,
+	VENDOR_SIS				=	9,
+	VENDOR_UMC				=	10,
+	VENDOR_VIA				=	11,
+	VENDOR_VORTEX			=	12,
+	VENDOR_KVM				=	13,
+	VENDOR_BHYVE			=	14,
+	VENDOR_HYPERV			=	15,
+	VENDOR_PARALLELS		=	16,
+	VENDOR_VMWARE			=	17,
+	VENDOR_XEN				=	18,
+	VENDOR_UNSPECIFIED		=	19,
+	VENDOR_SIZE				=	0xFFFFFFFF, //Force full integer size, sometimes it is difficult to figure out the size of an enum
 } CPUID_VENDOR_t;
 
 //used to store info about the CPU identification
@@ -550,7 +550,7 @@ struct CPUID_t
 	uint8_t			arch_capab	:	1;				//IA32_ARCH_CAPABILITIES
 	uint8_t			_r15		:	1;
 	uint8_t			ssbd		:	1;		//EAX = 7, EDX bit 31
-};
+} ProcessorFeatures_t; //SIZEOF(CPUID_t) = 20
 
 
 
