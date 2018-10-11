@@ -40,9 +40,7 @@ section .stack
 section .bootbss
 	cpu_vendor_name: resb 12
 	cpu_brand_index: resb 1
-	cpu_features: resb 28 ;Array of processor features, 28 bytes
-
-section .bss
+	;cpu_features: resb 28 ;Array of processor features, 28 bytes
 	cpu_features: 	resb 	20 	;New array of processor features, 20 bytes
 	cpu_vendor:		resb	4	;CPU vendor, 32-bit enum
 
@@ -56,9 +54,35 @@ section .boot
 
 		xor eax, eax
 
-		;Gather various CPUID info
-		mov eax, 0
+		;///////////////////////////////////
+		; BEGIN CPU FEATURES
+		;///////////////////////////////////
+
+		;First is EAX = 0
+		mov eax, 0 
 		cpuid
+
+		mov DWORD [cpu_features], edx
+		mov DWORD [cpu_features+4], ecx
+		
+		mov eax, 7
+		mov DWORD [cpu_features+8], ebx
+		mov DWORD [cpu_features+12], ecx
+		mov DWORD [cpu_features+16], edx
+		;///////////////////////////////////
+		; END CPU FEATURES
+		;///////////////////////////////////
+
+		;Quickly get the basic CPU features (this relative to a specific arch)
+		;TODO: FIX FOR AMD PROCESSORS
+		;cmp eax, 1736408429
+		;cmove eax, 80000001h
+		;cmovne eax, 1
+
+		;///////////////////////////////////
+		; BEGIN VENDOR NAME STUFF
+		;///////////////////////////////////
+		;Move enum value, 32-bit, cmove
 
 		;Get vendor name
 		mov DWORD [esp-4], ebx
@@ -69,112 +93,172 @@ section .boot
 		or [esp-4], [esp-8]
 		or [esp-4], [esp-12]
 
-		;Compare and set cpu_vendor, 32-bit enum
-
 		;INTEL
 		cmp [esp-4], 0x7d6f7f6f
 		cmove [cpu_vendor], 0
+		je .INTEL
 		
 		;AMD1
 		cmp [esp-4], 0x7d776f77
-		cmove [cpu_vendor], 1
+		je .AMD
 
 		;AMD2
 		cmp [esp-4], 0x6d7d7f67
-		cmove [cpu_vendor], 1
+		je .AMD
 
 		;CENTAUR
 		cmp [esp-4], 0x7f7e7563
-		cmove [cpu_vendor], 2
+		je .CENTAUR
 
 		;CYRIX
 		cmp [esp-4], 0x7f7f7d7f
-		cmove [cpu_vendor], 3
+		je .CYRIX
 
 		;HYGON
 		cmp [esp-4], 0x6f6f7f7f
-		cmove [cpu_vendor], 4
+		je .HYGON
 
 		;TRANSMETA
 		cmp [esp-4], 0x7f757f77
-		cmove [cpu_vendor], 5
+		je .TRANSMETA
 
 		;TRANSMETA AGAIN
 		cmp [esp-4], 0x777f7f6f
-		cmove [cpu_vendor], 5
+		je .TRANSMETA
 
 		;NATIONAL SEMICONDUCTOR
 		cmp [esp-4], 0x7f7f6f67
-		cmove [cpu_vendor], 6
+		je .NATIONAL
 
 		;NEXGEN
 		cmp [esp-4], 0x7f7d7f6f
-		cmove [cpu_vendor], 7
+		je .NEXGEN
 
 		;RISE 
 		cmp [esp-4], 0x65736952
-		cmove [cpu_vendor], 8
+		je .RISE
 
 		;SIS 
 		cmp [esp-4], 0x20536953
-		cmove [cpu_vendor], 9
+		je .SIS
 
-		;Implement later. yea.
-		
-		mov eax, 7
-		mov ecx, 0
-		cpuid
+		;UMC
+		cmp [esp-4], 0x20434d55
+		je .UMC
 
-		mov DWORD [cpu_features+8], ebx ;extended_features1
-		mov DWORD [cpu_features+12], ecx ;extended_features2
-		mov DWORD [cpu_feautres+16], edx ;extended_features3
+		;VIA
+		cmp [esp-4], 0x20414956
+		je .VIA
 
-		mov eax, 80000001h
-		cpuid
+		;Vortex
+		cmp [esp-4], 0x777f7f77
+		je .VORTEX
 
-		mov DWORD [cpu_features+20], edx
-		mov DWORD [cpu_features+24], ecx
+		;KVM 
+		cmp [esp-4], 0x7f6f7f5f
+		je .KVM
 
-		;Generates a unique value for each vendor
-		;Intel = [esp-8] = 1870622589
-		;AMD = [esp-8] = 1736408429
-		;VMWARE = [esp-8] = 2003662701
-		;MS VIRTUAL PC = [esp-8] = 2138795894
-		mov eax, [esp-4]
-		or eax, [cpu_vendor_name+4]
-		or eax, [cpu_vendor_name+8]
+		;BHYVE
+		cmp [esp-4], 0x7e7f7e7f
+		je .BHYVE
 
-		;Quickly get the basic CPU features (this relative to a specific arch)
-		cmp eax, 1736408429
-		cmove eax, 80000001h
-		cmovne eax, 1
+		;HYPERV
+		cmp [esp-4], 0x766f7b7f
+		je .HYPERV
 
-		cpuid
+		;PARALLELS
+		cmp [esp-4], 0x787b7e65
+		je .PARALLELS
 
-		mov [cpu_brand_index], ebx
-		mov DWORD [cpu_features], edx ;feature_bits1
-		mov DWORD [cpu_features+4], ecx ;feature_bits2
-
-		;Issue jmps to setup areas
-		cmp eax, 1870622589 ;Intel
-		cmove eax, 1
-		je .INTEL
-
-		cmp eax, 1736408429 ;AMD
-		cmove eax, 80000001h
-		je .AMD
-
-		cmp eax, 2003662701 ;VMWARE
-		cmove eax, 1
+		;VMWARE
+		cmp [esp-4], 0x6d776d77
 		je .VMWARE
 
-		cmp eax, 2138795894 ;MSVPC
-		cmove eax, 1
-		je .MSVPC
+		;XEN
+		cmp [esp-4], 0x7f7f7f7f
+		je .XEN
 
+		mov [cpu_vendor], 19
 		jmp .GENERAL_SETUP
+		;///////////////////////////////////
+		; END VENDOR NAME STUFF
+		;///////////////////////////////////
 
 	.INTEL:
+		mov DWORD [cpu_vendor], 1
+		jmp .GENERAL_SETUP
+
+	.AMD:
+		mov DWORD [cpu_vendor], 2
+		jmp .GENERAL_SETUP
+
+	.CENTAUR:
+		mov DWORD [cpu_vendor], 2
+		jmp .GENERAL_SETUP
+
+	.CYRIX:
+		mov DWORD [cpu_vendor], 3
+		jmp .GENERAL_SETUP
+
+	.HYGON:
+		mov DWORD [cpu_vendor], 4
+		jmp .GENERAL_SETUP
+
+	.TRANSMETA:
+		mov DWORD [cpu_vendor], 5
+		jmp .GENERAL_SETUP
+
+	.NATIONAL:
+		mov DWORD [cpu_vendor], 6
+		jmp .GENERAL_SETUP
+
+	.NEXGEN:
+		mov DWORD [cpu_vendor], 7
+		jmp .GENERAL_SETUP
+
+	.RISE:
+		mov DWORD [cpu_vendor], 8
+		jmp .GENERAL_SETUP
+
+	.SIS:
+		mov DWORD [cpu_vendor], 9
+		jmp .GENERAL_SETUP
+
+	.UMC:
+		mov DWORD [cpu_vendor], 10
+		jmp .GENERAL_SETUP
+
+	.VIA:
+		mov DWORD [cpu_vendor], 11
+		jmp .GENERAL_SETUP
+
+	.VORTEX:
+		mov DWORD [cpu_vendor], 12
+		jmp .GENERAL_SETUP
+
+	.KVM:
+		mov DWORD [cpu_vendor], 13
+		jmp .GENERAL_SETUP
+
+	.BHYVE:
+		mov DWORD [cpu_vendor], 14
+		jmp .GENERAL_SETUP
+
+	.HYPERV:
+		mov DWORD [cpu_vendor], 15
+		jmp .GENERAL_SETUP
+
+	.PARALLELS:
+		mov DWORD [cpu_vendor], 16
+		jmp .GENERAL_SETUP
+
+	.VMWARE:
+		mov DWORD [cpu_vendor], 17
+		jmp .GENERAL_SETUP
+
+	.XEN:
+		mov DWORD [cpu_vendor], 18
+		jmp .GENERAL_SETUP
 
 	.CANNONLAKE:
 		call CANNONLAKE_SETUP
@@ -240,11 +324,12 @@ section .boot
 	.GENERAL_SETUP:
 		;Perform all setup tasks here
 		;FPU_SETUP(feature_bits1, feature_bits2, extended_features1, extended_features2, extended_features3)
-		push [cpu_features]
-		push [cpu_features+4]
-		push [cpu_features+8]
-		push [cpu_features+12]
-		push [cpu_features+16]
+		push DWORD [cpu_vendor]
+		push DWORD [cpu_features]
+		push DWORD [cpu_features+4]
+		push DWORD [cpu_features+8]
+		push DWORD [cpu_features+12]
+		push DWORD [cpu_features+16]
 		call FPU_SETUP
 
 
