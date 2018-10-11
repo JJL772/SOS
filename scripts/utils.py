@@ -8,6 +8,8 @@ import settings
 
 from pathlib import Path
 
+src_dir = os.getcwd().replace("\\scripts", "").replace("\\", "/")
+
 python_version_major = 3
 python_version_minor = 0
 
@@ -26,7 +28,7 @@ DIST_DEBUG = "debug"
 
 #Returns a distro of the OS
 def get_distros(dist, type):
-    path = "build/" + dist + "/" + type + "/"
+    path = src_dir + "build/" + dist + "/" + type + "/"
     if not os.path.exists(path):
         return list()
 

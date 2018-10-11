@@ -1,7 +1,7 @@
 import os
 import subprocess
 import settings
-import util
+import utils as util
 import test
 import sys
 

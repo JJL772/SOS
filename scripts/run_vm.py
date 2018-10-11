@@ -1,6 +1,7 @@
 #Runs the OS in a VM
 
-import util
+import utils as util
+import subprocess
 
 util.check_python_version()
 

@@ -1,6 +1,9 @@
 #Settings for command-line jazz
 #you may need to tweak stuff in here to match your setup
 
+#DO NOT REMOVE
+from utils import src_dir 
+
 #Shell command for python
 python_command = "python3"
 
@@ -71,3 +74,12 @@ kernel_include_dirs = [
 	"src/kernel/",
 	"src/kernel/lib",
 ]
+
+kernel_x86_debug_out =      src_dir + "build/x86/debug/bin"
+kernel_x86_release_out =    src_dir + "build/x86/release/bin"
+kernel_x86_debug_int =      src_dir + "build/x86/debug/intermediate"
+kernel_x86_release_int =    src_dir +"build/x86/release/intermediate"
+
+kernel_x64_debug_out =      src_dir + "build/x64/debug/bin"
+kernel_x64_release_out =    src_dir + "build/x64/release/bin"
+
