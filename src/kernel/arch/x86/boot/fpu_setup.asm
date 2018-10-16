@@ -13,20 +13,32 @@ section .boot
 
 	;FPU_SETUP(feature_bits1, feature_bits2, extended_features1, extended_features2, extended_features3)
 	FPU_SETUP:
-		test feature_bits1, 0x1
-		call EMULATION
-
-	EMULATION:
-		;Setup FPU emulation
 		push ebp
 		mov esp, ebp
+		test DWORD [ebp], 0x1
+		jne .NOFPU
+		jmp .FPU
 
+	.FPU:
+		;Enable FPU if applicable.
+		; MP = 0, NE = 0, EM = 0
+		mov eax, cr0
+		btc eax, 1
+		btc eax, 2
+		btc eax, 5
+		mov cr0, eax
+		jmp .END
+		
+	.NOFPU:
 		;Set EM=1, NE=1, MP=0
 		mov eax, cr0
-		btr eax, 0x1
-		or eax, 0b0000_0000_0000_0000_0000_0000_0010_0100
+		btc eax, 1
+		bts eax, 2
+		bts eax, 5
 		mov cr0, eax
-		;Emulation is now enabled, FPU exceptions will be thrown when FPU instructions are executed,
+		;Emulation is now enabled
+		jmp .END
 
+	.END:
 		pop ebp
 		ret

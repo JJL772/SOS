@@ -332,7 +332,20 @@ section .boot
 		push DWORD [cpu_features+16]
 		call FPU_SETUP
 
+		;Setup Caches
+		; CR0.CD = 0, CR0.NW = 0
+		mov eax, cr0
+		btc eax, 30
+		btc eax, 29
+		mov cr0, eax
 
+		;Configure TS flag in CR0
+		mov eax, cr0		
+		xor eax, 0b0110_0000_0000_0000_0000_0000_0000_0000
+		test DWORD [cpu_features], 0x1
+		cmove cr0, eax
+	.ENABLE_TASKSW:
+		jmp .ENABLE_TASKSW ;dummy
 
 	_EnableAVX512:
 		;Nothing
