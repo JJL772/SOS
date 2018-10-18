@@ -8,3 +8,7 @@
 
 ;Stage 1 part 2 will be written in the range 0x100000 to 0x00EFFFFF
 
+global _start
+
+_start:
+    ;Dummy, work on later <3

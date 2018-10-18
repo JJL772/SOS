@@ -344,6 +344,9 @@ section .boot
 		xor eax, 0b0110_0000_0000_0000_0000_0000_0000_0000
 		test DWORD [cpu_features], 0x1
 		cmove cr0, eax
+
+		
+
 	.ENABLE_TASKSW:
 		jmp .ENABLE_TASKSW ;dummy
 
