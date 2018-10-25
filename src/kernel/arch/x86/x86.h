@@ -414,7 +414,7 @@ typedef enum
 	VENDOR_VMWARE			=	17,
 	VENDOR_XEN				=	18,
 	VENDOR_UNSPECIFIED		=	19,
-	VENDOR_SIZE				=	0xFFFFFFFF, //Force full integer size, sometimes it is difficult to figure out the size of an enum
+	VENDOR_SIZE				=	0x7FFFFFFF, //Force full integer size, sometimes it is difficult to figure out the size of an enum
 } CPUID_VENDOR_t;
 
 //used to store info about the CPU identification
