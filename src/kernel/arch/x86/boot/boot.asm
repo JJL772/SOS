@@ -322,28 +322,36 @@ section .boot
 
 
 	.GENERAL_SETUP:
-		;Perform all setup tasks here
-		;FPU_SETUP(feature_bits1, feature_bits2, extended_features1, extended_features2, extended_features3)
-		push DWORD [cpu_vendor]
-		push DWORD [cpu_features]
-		push DWORD [cpu_features+4]
-		push DWORD [cpu_features+8]
-		push DWORD [cpu_features+12]
-		push DWORD [cpu_features+16]
+		;Perform FPU setup tasks
 		call FPU_SETUP
 
-		;Setup Caches
-		; CR0.CD = 0, CR0.NW = 0
-		mov eax, cr0
-		btc eax, 30
-		btc eax, 29
+		;		   CR0.PG: Enables paging
+		;		   |							   CR0.NE: Enables native method of FPU error reporting (the good method)
+		;		   |							   |  | CR0.PE: Enables protection
+		;		   |							   |  |  |
+		;		   v							   v  v  v
+		mov eax, 0b1000_0000_0000_0000_0000_0000_0010_0001
+
 		mov cr0, eax
 
-		;Configure TS flag in CR0
-		mov eax, cr0		
-		xor eax, 0b0110_0000_0000_0000_0000_0000_0000_0000
-		test DWORD [cpu_features], 0x1
-		cmove cr0, eax
+		;
+		;						   CR4.OSXSAVE: Enables XSAVE/XRESTOR instructions
+		;						   |		CR4.UMIP: Disables use of certain instructions like SGDT in usermode
+		;						   |		|CR4.OSXMMEXCPT: Enables exception handling for SIMD extensions
+		;						   |        ||CR4.OSFXSR: Enables the use of FXSAVE and FXRESTOR
+		;						   |        |||CR4.PCE: Enables the use of RDPMC instruction
+		;						   |        |||| CR4.PGE: Sets frequently used pages as global for all users
+		;						   |		|||| |CR4.MCE: Enables machine-check features
+		;						   |        |||| ||CR4.PAE: Enables physical address extensions
+		;						   |		|||| |||     CR4.VME: Enables virtual-8086-mode extensions
+		;						   |        |||| |||	 |
+		;						   v 		vvvv vvv	 v
+		mov eax, 0b0000_0000_0000_0100_0000_1111_1110_0001
+
+		mov cr4, eax
+
+		
+
 
 		
 

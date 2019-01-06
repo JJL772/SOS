@@ -11,12 +11,17 @@ global FPU_SETUP
 
 section .boot
 
-	;FPU_SETUP(feature_bits1, feature_bits2, extended_features1, extended_features2, extended_features3)
 	FPU_SETUP:
 		push ebp
 		mov esp, ebp
-		test DWORD [ebp], 0x1
-		jne .NOFPU
+
+		;Obtain processor details
+		mov eax, 1
+		cpuid
+
+		;Test and see if the processor has an onboard FPU
+		test DWORD edx, 0x1
+		jz .NOFPU
 		jmp .FPU
 
 	.FPU:
@@ -40,5 +45,6 @@ section .boot
 		jmp .END
 
 	.END:
+		;Retore & return
 		pop ebp
 		ret
