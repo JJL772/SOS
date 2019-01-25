@@ -8,7 +8,8 @@ import settings
 
 from pathlib import Path
 
-src_dir = os.getcwd().replace("\\scripts", "").replace("\\", "/")
+main_dir = os.getcwd().replace("scripts", "").replace("\\", "/")
+src_dir = main_dir + "/src/"
 
 python_version_major = 3
 python_version_minor = 0

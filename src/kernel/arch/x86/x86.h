@@ -200,8 +200,8 @@ struct task_descriptor_t
 
 task_descriptor_t INIT_TASK_DESCRIPTOR(task_descriptor_t& desc)
 {
-	((QWORD)desc) = 0;
-	*(((BYTE*)desc) + 5) |= 0b10010000;
+	(*(QWORD*)&desc) = 0;
+	*(((BYTE*)&desc) + 5) |= 0b10010000;
 }
 
 //
@@ -221,8 +221,8 @@ struct task_gate_descriptor_t
 
 task_gate_descriptor_t INIT_TASK_GATE_DESCRIPTOR(task_gate_descriptor_t& desc)
 {
-	((QWORD)desc) = 0;
-	*(((BYTE*)desc) + 5) |= 0b10100000;
+	(*(QWORD*)&desc) = 0;
+	*(((BYTE*)&desc) + 5) |= 0b10100000;
 }
 
 //
@@ -551,6 +551,8 @@ struct CPUID_t
 	uint8_t			_r15		:	1;
 	uint8_t			ssbd		:	1;		//EAX = 7, EDX bit 31
 } ProcessorFeatures_t; //SIZEOF(CPUID_t) = 20
+
+
 
 
 

@@ -22,6 +22,9 @@ nasm_command = "nasm"
 #GAS command
 gas_command = "gas"
 
+#Clang command
+clang_command = "clang"
+
 #genisoimage command
 genisoimage_command = "genisoimage"
 
