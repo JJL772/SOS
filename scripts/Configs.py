@@ -24,10 +24,15 @@ class BuildConfigBase():
 
 	ComplierSpecificFlags = dict()
 
+	CompileSteps = list()
+
 	def add_compiler_specific_flags(self, compiler, flags):
 		self.ComplierSpecificFlags[compiler] = flags
 
+
 class Build_Debug_x86(BuildConfigBase):
+
+
 	BuildConfigName = "x86-debug"
 
 	PreprocessorDefinitions = ["X86", "_X86", "_x86_", "_DEBUG"]

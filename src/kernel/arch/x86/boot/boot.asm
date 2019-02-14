@@ -28,6 +28,10 @@ extern P6_SETUP
 extern I486_SETUP
 extern I386_SETUP
 extern FPU_SETUP
+extern os_multiboot_data
+extern os_bootloader_type
+extern os_cpuid_data
+extern os_cpuid_vendor
 ;==================================
 
 section .stack
