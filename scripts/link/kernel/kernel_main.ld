@@ -13,6 +13,13 @@ ENTRY(_boot)
 SECTIONS {
 	. = 1M;
 
+	/* GDT and IDT here */
+	.bss BLOCK(4k) : ALIGN(4k)
+	{
+		*(.gdt)
+		*(.idt)
+	} = 0x0;
+
 	/* 8kb of boot code */
 	.text BLOCK(8K) : ALIGN(8K)
 	{

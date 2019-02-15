@@ -4,38 +4,121 @@
 #
 #=========================================#
 
+#=========================================#
+# 
+# Command settings
+#
+#=========================================#
+NASM_CMD			=	nasm
 
-REM_DIR = intermediate/*.o
-NASM_FORMAT = elf32
-LD_PARAMS = -nostdlib 
-KERNEL_OUT = bin/kernel.elf
-KERNEL_ISO = iso/boot/kernel.elf
-OBJ_OUT_C = intermediate/kernel.o intermediate/screen.o
-OBJ_OUT_ASM = intermediate/boot.o
+CLANG_CMD			=	clang 
 
-CPP_SRC =	$(wildcard src/kernel/*.cpp) \
-			$(wildcard src/drivers/*.cpp)\
-			$(wildcard src/kernel/screen/*.cpp)\
-			$(wildcard src/kernel/memory/*.cpp) \
-			$(wildcard src/lib/*.cpp) \
-			$(wildcard src/kernel/core/*.cpp)\
-			$(wildcard src/kernel/main/*.cpp) \
-			
-ASM_SRC =	$(wildcard src/kernel/*.asm) 
-			
-OBJ_OUT = intermediate/cpp_out.o
+LINKER_CMD			=	ld
+
+GEN_ISO_IMAGE_CMD	=	genisoimage
+
+#=========================================#
+# 
+# Directory settings
+#
+#=========================================#
+INTERMEDIATE_DIR	=	intermediate
+
+OUTPUT_DIR			=	build/i386
+
+DISK_IMAGE_DIR		=	iso
+
+KERNEL_ISO_BIN		=	$(ISO)/boot/$(KERNEL_FILENAME)
+
+ISO_OUTPUT			=	$(OUTPUT_DIR)/
+
+KERNEL_SRC_DIR		=	src/kernel
+
+KERNEL_ARCH_DIR		=	$(KERNEL_SRC_DIR)/arch/x86
+
+#=========================================#
+# 
+# Filename/output settings
+#
+#=========================================#
+LINKER_SCRIPT		=	scripts/link/kernel_main.ld
+
+KERNEL_OUTPUT_FILE	=	$(OUTPUT_DIR)/kernel.elf
+
+CLANG_OBJ_FILE		=	$(INTERMEDIATE_DIR)/kernel/kernel_c_obj.o
+
+ASM_OBJ_FILE		=	$(INTERMEDIATE_DIR)/kernel/kernel_asm_obj.o
+
+#=========================================#
+# 
+# General build settings
+#
+#=========================================#
+PREPROCESSOR_DEFS	=	-D_KERNEL_BUILD=1 -DARCH_X86=1 -D_I386=1 -D_X86_
+
+INCLUDE_DIRECTORIES	=	-I $(KERNEL_SRC_DIR) -I $(KERNEL_ARCH_DIR)
+
+#=========================================#
+# 
+# Flags
+#
+#=========================================#
+GEN_ISO_FLAGS		=	-R -b iso/boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A os -input-charset-utf8 
+
+NASM_OBJ_FORMAT		=	elf32
+
+NASM_FLAGS			=	-f $(NASM_OBJ_FORMAT)
+
+LINKER_FLAGS		=	-nostdlib -m$(NASM_OBJ_FORMAT) -T $(LINKER_SCRIPT)
+
+CLANG_FLAGS			=	-m32 -fno-stack-protector -w -nostartfiles -nodefaultlibs -mcpu=i386
+
+#=========================================#
+# 
+# Source files
+#
+#=========================================#
+C_SRC	=	$(wildcard $(KERNEL_ARCH_DIR/int/*.c)	\
+			$(wildcard $(KERNEL_ARCH_DIR/*.c))	
+
+ASM_SRC	=	$(wildcard $(KERNEL_ARCH_DIR/*.asm))		\
+			$(wildcard $(KERNEL_ARCH_DIR/boot/*.asm))
 		
-ASM_OBJ_OUT = 	$(ASM_SRC:.asm=.o)
-		
-all:
-	clang -m32 -D_KERNEL_BUILD=1 -fno-stack-protector -w -nostartfiles -nodefaultlibs $(C_SRC) -o $(OBJ_OUT)
-	nasm -f $(NASM_FORMAT) $(ASM_SRC) -o $(ASM_OBJ_OUT)
-	ld -T scripts/link/kernel_main.ld -melf_i386 $(LD_PARAMS) $(ASM_OBJ_OUT) $(OBJ_OUT) -o $(KERNEL_OUT)
+#=========================================#
+# 
+# Rules
+#
+#=========================================#
+
+all: $(build)
+
+build: | $(INTERMEDIATE_DIR) $(OUTPUT_DIR) $(DISK_IMAGE_DIR)
+	$(CLANG_CMD) $(CLANG_FLAGS) $(C_SRC) -o $(CLANG_OBJ_FILE)
+
+	$(NASM_CMD) $(NASM_FLAGS) $(ASM_SRC) -o $(ASM_OBJ_FILE)
+
+	$(LINKER_CMD) $(LINKER_FLAGS) $(ASM_OBJ_FILE) $(CLANG_OBJ_FILE) -o $(KERNEL_OUTPUT_FILE)
+
+	$(GEN_ISO_IMAGE_CMD) $(GEN_ISO_FLAGS) -o $(ISO_OUTPUT_FILE) iso
 
 
-	cp $(KERNEL_OUT) $(KERNEL_ISO)
-	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A os -input-charset utf8 -quiet -boot-info-table -o os.iso iso
+	#cp $(KERNEL_OUT) $(KERNEL_ISO)
+	#genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A os -input-charset utf8 -quiet -boot-info-table -o os.iso iso
 
-mkiso:
-	echo Not implemented.
-	
+
+clean:
+	rm $(ISO_OUTPUT_FILE)
+	rm $(KERNEL_OUTPUT_FILE)
+	rm $(ASM_OBJ_FILE)
+	rm $(CLANG_OBJ_FILE)
+
+rebuild: $(clean) $(build)
+
+$(INTERMEDIATE_DIR):
+	mkdir $(INTERMEDIATE_DIR)
+
+$(OUTPUT_DIR):
+	mkdir $(OUTPUT_DIR)
+
+$(DISK_IMAGE_DIR):
+	mkdir $(DISK_IMAGE_DIR)

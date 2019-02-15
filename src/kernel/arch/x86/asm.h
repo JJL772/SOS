@@ -14,10 +14,13 @@ typedef struct { char data[112]; } os_multiboot_data_t;
 
 extern short 					os_cpuid_vendor;
 extern char 					os_bootloader_type;
-extern os_cpuid_data_t 			os_cpuid_data;
-extern os_multiboot_data_t 		os_multiboot_data;
+extern os_cpuid_data_t* 		os_cpuid_data;
+extern os_multiboot_data_t* 	os_multiboot_data;
+extern void*					os_gdt_base;
 
-extern void __attribute__((stdcall)) os_setup_idt();
+extern bool __attribute__((stdcall)) os_setup_idt();
+extern void __attribute__((stdcall)) os_setup_gdt();
+extern void __attribute__((stdcall)) os_select_segment(char segment_reg, short descriptor);
 
 #endif
 #endif
