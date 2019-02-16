@@ -4,32 +4,17 @@
 ; Routines for modifying the GDT
 ;
 
+%include "common.asm"
+
 ; Globals
 global os_select_segment
 global os_setup_gdt
-global os_gdt_base
+;global os_gdt_base
+extern os_gdt_base
+extern os_gdt_limit
 
-%define KERNEL_DATA_SEG_INDEX	1
-%define KERNEL_CODE_SEG_INDEX	2
-%define USER_DATA_SEG_INDEX		3
-%define USER_CODE_SEG_INDEX		4
-
-struc gdt_info_32_t	
-	.limit	resw	1 ;WORD
-	.base	resd	1 ;DWORD
-endstruc
-
-struc gdt_descriptor_t
-	.limitw	resw	1
-	.base1	resw	1
-	.base2	resb	1
-	.misc1	resb	1
-	.misc2	resb	1
-	.base3	resb	1
-endstruc
-
-section .gdt
-	os_gdt_base:	resb	40
+;section .gdt
+;	os_gdt_base:	resb	40
 
 section .bootbss
 	gdt_info:		resb	gdt_info_32_t_size

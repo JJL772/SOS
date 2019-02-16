@@ -4,7 +4,7 @@
 ; Setup for Interrupt vector table IVT or IDT
 ;
 
-%include "gdt.asm"
+%include "common.asm"
 
 ;=========================================;
 ; External ivt procs
@@ -25,15 +25,15 @@ extern ivt_ts
 extern ivt_ud
 extern ivt_ve
 extern ivt_xm
+extern os_idt_base
+extern os_idt_limit
 ;=========================================;
 
-struc idt_info_32_t	
-	.limit	resw	1
-	.base	resd	1
-endstruc
+;global os_idt_base
+global os_setup_idt
 
-section .idt
-	os_idt_base:	resb	2048 ;1kb ivt
+;section .idt
+;	os_idt_base:	resb	2048 ;1kb ivt
 
 
 section .boot

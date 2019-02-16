@@ -53,10 +53,16 @@ section .boot
 
 
 	_boot:
+		cli ;disable all interrupts for crtitical section of boot
+
 		;setup the stack
 		mov esp, stack_top
 
 		xor eax, eax
+
+		call os_setup_gdt ; Setup gdt
+
+		call os_setup_idt ; setup idt
 
 		;///////////////////////////////////
 		; BEGIN CPU FEATURES

@@ -13,12 +13,42 @@ ENTRY(_boot)
 SECTIONS {
 	. = 1M;
 
-	/* GDT and IDT here */
+	/*
+
+	Descriptor table sections
+
+	*/
+	/* Base of IDT */
+	os_idt_base = .;
+	.bss BLOCK(4k) : ALIGN(4k)
+	{
+		*(.idt)
+	} = 0x0;
+	/* Limit of IDT */
+	os_idt_limit = .;
+
+	/* Base of GDT */
+	os_gdt_base = .;
 	.bss BLOCK(4k) : ALIGN(4k)
 	{
 		*(.gdt)
-		*(.idt)
+	} = 0x0; /* Fill remaining with */
+	/* Limit of GDT */
+	os_gdt_limit = . - os_gdt_base;
+
+	/*
+
+	Stack
+
+	*/
+	/* Base addr of stack, aka the lowest addr of the stack */
+	os_stack_base = .;
+	.bss BLOCK(16k) : ALIGN(8k)
+	{
+		*(.stack)
 	} = 0x0;
+	/* Top of stack, grows downwards */
+	os_stack_top = .;
 
 	/* 8kb of boot code */
 	.text BLOCK(8K) : ALIGN(8K)
@@ -75,22 +105,4 @@ SECTIONS {
 	} = 0x90 /* Fill remaining space with NOP instructions (Opcode = 0x6690) */
 
 	/* 128 kb */
-
-	/* Kernel stack, 16kb */
-	.bss BLOCK(16K) : ALIGN(16K)
-	{
-		*(.stack)
-	} = 0x0 /* Unused area zeroed out */
-
-	/* Move data sections here in the future?
-	.data BLOCK(64K) : ALIGN(64K)
-	{
-		*(.data)
-	} = 0x0
-
-	.bss BLOCK(64K) : ALIGN(64K)
-	{
-		*(.bss)
-	} = 0x0
-	*/
 }
