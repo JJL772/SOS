@@ -47,15 +47,43 @@ section .boot
 		test eflags, 0x200
 		jnz .ERR
 
-
-
 		
-	.ERR
+	.ERR:
 		pop ebp
 		push 0x0
 		retf
 
-	.END
+	.END:
 		pop ebp
 		push 0x1
+		retf
+
+	; QWORD os_create_int_gate(WORD seg_selector, DWORD fnptr)
+	os_create_int_gate:
+		push ebp
+		mov ebp, esp
+
+		mov DWORD ecx, [ebp-4]
+		mov WORD edx, [ebp-8]
+
+		mov eax, [ebp-32]
+		mov WORD [eax], cx
+		mov WORD [eax+2], edx
+		mov BYTE [eax+4], 0
+		mov BYTE [eax+5], 0b10001110
+		mov WORD [eax+6], [ebp-8]
+
+		pop ebp
+		mov ecx, eax
+		mov DWORD eax, [eax]
+		mov DWORD edx, [eax+4]
+		retf
+
+	; QWORD os_create_trap_gate(WORD seg_selector, DWORD fnptr)
+	os_create_trap_gate:
+		push ebp
+		mov ebp, esp
+
+
+		pop ebp
 		retf

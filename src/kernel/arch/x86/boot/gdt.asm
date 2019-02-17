@@ -91,27 +91,27 @@ section .boot
 		push ebp
 		mov ebp, esp
 
-		test BYTE [ebp], 0x1
+		test BYTE [ebp-4], 0x1
 		jnz .SS
-		test BYTE [ebp], 0x2
+		test BYTE [ebp-4], 0x2
 		jnz .DS
-		test BYTE [ebp], 0x3
+		test BYTE [ebp-4], 0x3
 		jnz .CS
 		jmp .END
 
-	.DS
-		mov WORD ds, [ebp-1]
+	.DS:
+		mov WORD ds, [ebp-8]
 		jmp .END
 
-	.CS
-		mov WORD cs, [ebp-1]
+	.CS:
+		mov WORD cs, [ebp-8]
 		jmp .END
 	
-	.SS
-		mov WORD ss, [ebp-1]
+	.SS:
+		mov WORD ss, [ebp-8]
 		jmp .END
 
-	.END
+	.END:
 		pop ebp
 
 		retf
