@@ -1,0 +1,3 @@
+default=0
+title JOS 0.0.1-alpha
+kernel /boot/kernel.elf
