@@ -5,27 +5,6 @@
 ;
 
 
-global ivt_gp
-global ivt_ac
-global ivt_bp
-global ivt_br
-global ivt_db
-global ivt_de
-global ivt_df
-global ivt_mc
-global ivt_mf
-global ivt_nm
-global ivt_of
-global ivt_pf
-global ivt_sys
-global ivt_ts
-global ivt_ud
-global ivt_ve
-global ivt_xm
-global ivt_ss
-
-extern 
-
 section .inthandler
 
 	ivt_gp:
@@ -77,7 +56,4 @@ section .inthandler
 		iret
 
 	ivt_xm:
-		iret
-
-	ivt_ss:
 		iret

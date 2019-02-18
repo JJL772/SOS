@@ -11,7 +11,6 @@
 #define _INT_H
 
 #include "../x86.h"
-#include "../common.h"
 
 //PROC(unsigned EFLAGS, unsigned short CS, unsigned EIP, int ERR_CODE)
 typedef void(*interrupt_proc)(unsigned int, unsigned short, unsigned int, int);
@@ -37,23 +36,22 @@ interrupt_proc XM_INT INTERRUPT_DATA;
 interrupt_proc SYS_INT INTERRUPT_DATA;
 */
 
-void AC_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void BP_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void BR_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void DB_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void DE_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void DF_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void GP_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void MC_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void MF_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void NM_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void OF_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void PF_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void TS_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void UD_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void VE_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void XM_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
-void SS_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE)	SECTION_INTERRUPT_VECTOR_CODE;
-void SYS_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE) 	SECTION_INTERRUPT_VECTOR_CODE;
+void AC_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void BP_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void BR_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void DB_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void DE_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void DF_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void GP_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void MC_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void MF_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void NM_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void OF_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void PF_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void TS_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void UD_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void VE_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void XM_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
+void SYS_INT(uint32_t EFLAGS, uint16_t CS, uint32_t EIP, int32_t ERR_CODE);
 
 #endif //_INT_H
