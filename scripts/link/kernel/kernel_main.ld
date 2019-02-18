@@ -15,12 +15,22 @@ SECTIONS {
 
 	/*
 
+	Kernel page table
+
+	*/
+	os_kernel_pagetbl = .;
+	.bss BLOCK(4k) : ALIGN(4k)
+	{
+		*(.pgtbl)
+	}
+	/*
+
 	Descriptor table sections
 
 	*/
 	/* Base of IDT */
 	os_idt_base = .;
-	.bss BLOCK(4k) : ALIGN(4k)
+	.bss BLOCK(2k) : ALIGN(2k)
 	{
 		*(.idt)
 	} = 0x0;
@@ -29,7 +39,7 @@ SECTIONS {
 
 	/* Base of GDT */
 	os_gdt_base = .;
-	.bss BLOCK(4k) : ALIGN(4k)
+	.bss BLOCK(2k) : ALIGN(2k)
 	{
 		*(.gdt)
 	} = 0x0; /* Fill remaining with */

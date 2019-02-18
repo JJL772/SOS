@@ -4,6 +4,8 @@
 ; Routines for modifying the GDT
 ;
 
+[BITS 32]
+
 %include "common.asm"
 
 ; Globals
@@ -21,7 +23,7 @@ section .bootbss
 
 section .boot
 
-	; Sets up the 
+	; Sets up the gdt
 	os_setup_gdt:
 		push ebp
 		mov ebp, esp
@@ -114,4 +116,24 @@ section .boot
 	.END:
 		pop ebp
 
+		retf
+
+	; void os_select_cs_segment(WORD descriptor)
+	os_select_cs_segment:
+		push ebp
+		mov ebp, esp
+
+		mov WORD cs, [ebp-4]
+
+		pop ebp
+		retf
+
+	; void os_select_ds_segment(WORD descriptor)
+	os_select_ds_segment:
+		push ebp
+		mov ebp, esp
+
+		mov WORD ds, [ebp-4]
+
+		pop ebp
 		retf

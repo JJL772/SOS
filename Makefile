@@ -78,11 +78,11 @@ CLANG_FLAGS			=	-m32 -fno-stack-protector -w -nostartfiles -nodefaultlibs -mcpu=
 # Source files
 #
 #=========================================#
-C_SRC	=	$(wildcard $(KERNEL_ARCH_DIR/int/*.c)	\
-			$(wildcard $(KERNEL_ARCH_DIR/*.c))	
+C_SRC	=	$(wildcard $(KERNEL_ARCH_DIR)/int/*.c)	\
+			$(wildcard $(KERNEL_ARCH_DIR)/*.c)
 
-ASM_SRC	=	$(wildcard $(KERNEL_ARCH_DIR/*.asm))		\
-			$(wildcard $(KERNEL_ARCH_DIR/boot/*.asm))
+ASM_SRC	=	$(wildcard $(KERNEL_ARCH_DIR)/*.asm)		\
+			$(wildcard $(KERNEL_ARCH_DIR)/boot/*.asm)
 		
 #=========================================#
 # 
@@ -92,10 +92,10 @@ ASM_SRC	=	$(wildcard $(KERNEL_ARCH_DIR/*.asm))		\
 
 all: $(build)
 
-build: | $(INTERMEDIATE_DIR) $(OUTPUT_DIR) $(DISK_IMAGE_DIR)
-	$(CLANG_CMD) $(CLANG_FLAGS) $(C_SRC) -o $(CLANG_OBJ_FILE)
-
+build:
 	$(NASM_CMD) $(NASM_FLAGS) $(ASM_SRC) -o $(ASM_OBJ_FILE)
+	
+	$(CLANG_CMD) $(CLANG_FLAGS) $(C_SRC) -o $(CLANG_OBJ_FILE)
 
 	$(LINKER_CMD) $(LINKER_FLAGS) $(ASM_OBJ_FILE) $(CLANG_OBJ_FILE) -o $(KERNEL_OUTPUT_FILE)
 
