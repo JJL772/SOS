@@ -1,7 +1,0 @@
-//===========================================//
-// Name: %NAME%
-// Contributors:
-// Description:
-// License: NONE
-// Date of Creation: <%MONTH%-%DAY%-%YEAR%> %HOUR%:%MINUTE%
-//===========================================//
