@@ -31,7 +31,7 @@ section .boot
 		; First descriptor should be 0
 		mov QWORD [os_gdt_base], 0
 
-		mov eax, os_gdt_base
+		mov DWORD eax, os_gdt_base
 
 		; Set up kernel data segment
 		mov WORD [eax+8], 	0xFFFF
