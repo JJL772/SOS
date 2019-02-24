@@ -33,6 +33,55 @@ Defines low-level code that can be used in C and stuff
 #define X86_LOAD_CR3(cr3)
 #define X86_LOAD_CR4(cr4)
 
+#define __load_cr0(cr0) asm("movl %0, %%cr0" : : "r"(cr0))
+#define __load_cr1(cr1) asm("movl %0, %%cr1" : : "r"(cr1))
+//#define __load_cr2(cr2) asm("movl %0, %%cr2" : : "r"(cr1))
+#define __load_cr3(cr3) asm("movl %0, %%cr3" : : "r"(cr1))
+#define __load_cr4(cr4) asm("movl %0, %%cr4" : : "r"(cr1))
+#define __load_cr8(cr8) asm("movl %0, %%cr8" : : "r"(cr1))
+
+#define __read_cr0(out) asm("movl %%cr0, %0" : "=m"(out))
+#define __read_cr1(out) asm("movl %%cr1, %0" : "=m"(out))
+//#define __read_cr2(out) asm("movl %%cr2, %0" : "=r"(out))
+#define __read_cr3(out) asm("movl %%cr3, %0" : "=m"(out))
+#define __read_cr4(out) asm("movl %%cr4, %0" : "=m"(out))
+#define __read_cr8(out) asm("movl %%cr8, %0" : "=m"(out))
+
+#define __sti() asm("sti")
+#define __cli() asm("cli")
+
+#define __load_eip(eip) asm("movl %0, %%eip" : : "m"(eip))
+#define __load_esp(esp) asm("movl %0, %%esp" : : "m"(eip))
+#define __load_ebp(ebp) asm("movl %0, %%ebp" : : "m"(eip))
+#define __load_eflags(eflags) asm("movl %0, %%eflags" : : "m"(eip))
+#define __load_edi(edi) asm("movl %0, %%edi" : : "m"(eip))
+#define __load_esi(esi) asm("movl %0, %%esi" : : "m"(eip))
+#define __load_eax(eax) asm("movl %0, %%eax" : : "m"(eip))
+#define __load_ebx(ebx) asm("movl %0, %%ebx" : : "m"(eip))
+#define __load_ecx(ecx) asm("movl %0, %%ecx" : : "m"(eip))
+#define __load_edx(edx) asm("movl %0, %%edx" : : "m"(eip))
+#define __ldgt(descriptor) asm("lgdt (%0)" : : "m"(descriptor))
+#define __lldt(descriptor) asm("lldt (%0)" : : "m"(descriptor))
+#define __lidt(descriptor) asm("lidt (%0)" : : "m"(descriptor))
+
+#define __read_esp(out) asm("movl %%esp, %0" : "=m"(out))
+//#define __read_eip(out) asm("movl %%eip, %0" : "=m"(out))
+#define __read_ebp(out) asm("movl %%ebp, %0" : "=m"(out))
+#define __read_eflags(out) asm("movl %%eflags, %0" : "=m"(out))
+#define __read_edi(out) asm("movl %%edi, %0" : "=m"(out))
+#define __read_esi(out) asm("movl %%esi, %0" : "=m"(out))
+#define __read_eax(out) asm("movl %%eax, %0" : "=m"(out))
+#define __read_ebx(out) asm("movl %%ebx, %0" : "=m"(out))
+#define __read_ecx(out) asm("movl %%ecx, %0" : "=m"(out))
+#define __read_edx(out) asm("movl %%edx, %0" : "=m"(out))
+#define __read_gdtr(out) asm("sgdt (%0)" : "=m"(out))
+#define __read_ldtr(out) asm("sldt (%0)" : "=m"(out))
+#define __read_idtr(out) asm("sidt (%0)" : "=m"(out))
+#define __rdtsc(lo, hi) asm volatile(	"rdtsc\n\t"				\
+										"movl %%eax, %0\n\t"	\
+										"movl %%edx, %1\n\t" 	\
+										: "=r"(lo) "=r"(hi))
+
 struct CR0_t
 {
 	int PE : 1;
@@ -200,10 +249,11 @@ struct task_descriptor_t
 	WORD 	limit_low		:	16;
 };
 
-task_descriptor_t INIT_TASK_DESCRIPTOR(task_descriptor_t& desc)
+struct task_descriptor_t INIT_TASK_DESCRIPTOR(struct task_descriptor_t& desc)
 {
 	(*(QWORD*)&desc) = 0;
 	*(((BYTE*)&desc) + 5) |= 0b10010000;
+	return desc;
 }
 
 //
@@ -221,10 +271,11 @@ struct task_gate_descriptor_t
 	WORD 	_r5				:	16;
 };
 
-task_gate_descriptor_t INIT_TASK_GATE_DESCRIPTOR(task_gate_descriptor_t& desc)
+struct task_gate_descriptor_t INIT_TASK_GATE_DESCRIPTOR(struct task_gate_descriptor_t& desc)
 {
 	(*(QWORD*)&desc) = 0;
 	*(((BYTE*)&desc) + 5) |= 0b10100000;
+	return desc;
 }
 
 //
@@ -338,7 +389,7 @@ struct EFLAGS_t
 	uint8_t		VIF :	1;
 	uint8_t		VIP :	1;
 	uint8_t		ID	:	2;
-	uint8_t		VAD :	9;
+	uint16_t	VAD :	9;
 };
 
 struct idt_error_t
@@ -349,7 +400,7 @@ struct idt_error_t
 	int SELECTOR : 29;
 };
 
-struct idt_task_gate_t
+typedef struct idt_task_gate
 {
 	int _r1 : 16;
 	int TSS_SELECTOR : 16;
@@ -358,9 +409,9 @@ struct idt_task_gate_t
 	int DPL : 2;
 	int P : 1;
 	int _r4 : 16;
-};
+} idt_task_gate_t;
 
-struct idt_interrupt_gate_t
+typedef struct idt_interrupt_gate
 {
 	int OFFSET1 : 16;
 	int SEG_SELECTOR : 16;
@@ -372,7 +423,7 @@ struct idt_interrupt_gate_t
 	int DPL : 2;
 	int P : 1;
 	int OFFSET2 : 16;
-};
+} idt_interrupt_gate_t;
 
 struct idt_trap_gate_t
 {
@@ -416,7 +467,7 @@ typedef enum
 	VENDOR_VMWARE			=	17,
 	VENDOR_XEN				=	18,
 	VENDOR_UNSPECIFIED		=	19,
-	VENDOR_SIZE				=	0x7FFFFFFF, //Force full integer size, sometimes it is difficult to figure out the size of an enum
+	VENDOR_SIZE				=	0x7FFFFFFF, //Force full integer size
 } CPUID_VENDOR_t;
 
 //used to store info about the CPU identification
