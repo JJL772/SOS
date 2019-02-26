@@ -36,9 +36,9 @@ Defines low-level code that can be used in C and stuff
 #define __load_cr0(cr0) asm("movl %0, %%cr0" : : "r"(cr0))
 #define __load_cr1(cr1) asm("movl %0, %%cr1" : : "r"(cr1))
 //#define __load_cr2(cr2) asm("movl %0, %%cr2" : : "r"(cr1))
-#define __load_cr3(cr3) asm("movl %0, %%cr3" : : "r"(cr1))
-#define __load_cr4(cr4) asm("movl %0, %%cr4" : : "r"(cr1))
-#define __load_cr8(cr8) asm("movl %0, %%cr8" : : "r"(cr1))
+#define __load_cr3(cr3) asm("movl %0, %%cr3" : : "r"(cr3))
+#define __load_cr4(cr4) asm("movl %0, %%cr4" : : "r"(cr4))
+#define __load_cr8(cr8) asm("movl %0, %%cr8" : : "r"(cr8))
 
 #define __read_cr0(out) asm("movl %%cr0, %0" : "=m"(out))
 #define __read_cr1(out) asm("movl %%cr1, %0" : "=m"(out))
@@ -51,15 +51,15 @@ Defines low-level code that can be used in C and stuff
 #define __cli() asm("cli")
 
 #define __load_eip(eip) asm("movl %0, %%eip" : : "m"(eip))
-#define __load_esp(esp) asm("movl %0, %%esp" : : "m"(eip))
-#define __load_ebp(ebp) asm("movl %0, %%ebp" : : "m"(eip))
+#define __load_esp(esp) asm("movl %0, %%esp" : : "m"(esp))
+#define __load_ebp(ebp) asm("movl %0, %%ebp" : : "m"(ebp))
 #define __load_eflags(eflags) asm("movl %0, %%eflags" : : "m"(eip))
-#define __load_edi(edi) asm("movl %0, %%edi" : : "m"(eip))
-#define __load_esi(esi) asm("movl %0, %%esi" : : "m"(eip))
-#define __load_eax(eax) asm("movl %0, %%eax" : : "m"(eip))
-#define __load_ebx(ebx) asm("movl %0, %%ebx" : : "m"(eip))
-#define __load_ecx(ecx) asm("movl %0, %%ecx" : : "m"(eip))
-#define __load_edx(edx) asm("movl %0, %%edx" : : "m"(eip))
+#define __load_edi(edi) asm("movl %0, %%edi" : : "m"(edi))
+#define __load_esi(esi) asm("movl %0, %%esi" : : "m"(esi))
+#define __load_eax(eax) asm("movl %0, %%eax" : : "m"(eax))
+#define __load_ebx(ebx) asm("movl %0, %%ebx" : : "m"(ebx))
+#define __load_ecx(ecx) asm("movl %0, %%ecx" : : "m"(ecx))
+#define __load_edx(edx) asm("movl %0, %%edx" : : "m"(edx))
 #define __ldgt(descriptor) asm("lgdt (%0)" : : "m"(descriptor))
 #define __lldt(descriptor) asm("lldt (%0)" : : "m"(descriptor))
 #define __lidt(descriptor) asm("lidt (%0)" : : "m"(descriptor))
@@ -80,7 +80,7 @@ Defines low-level code that can be used in C and stuff
 #define __rdtsc(lo, hi) asm volatile(	"rdtsc\n\t"				\
 										"movl %%eax, %0\n\t"	\
 										"movl %%edx, %1\n\t" 	\
-										: "=r"(lo) "=r"(hi))
+										: "=r"(lo), "=r"(hi))
 
 struct CR0_t
 {
