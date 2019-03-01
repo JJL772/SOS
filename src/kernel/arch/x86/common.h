@@ -23,11 +23,26 @@ THIS FILE SHOULD HAVE NO DEPENDENCIES ON ANY OTHER FILES
 #define SECTION_GDT						__attribute__((section(".gdt")))
 #define SECTION_STACK					__attribute__((section(".stack")))
 
+#define CDECL	__attribute__((cdecl))
+
+
+typedef unsigned char uint8;
+typedef char int8;
+typedef unsigned short uint16;
+typedef short int16;
+typedef unsigned int uint32;
+typedef int int32;
+typedef long long int64;
+typedef unsigned long long uint64;
 
 #define BYTE char
 #define WORD short
 #define DWORD int
 #define QWORD long long
+
+#define bool int
+#define true 1
+#define false 0
 
 #endif
 #endif

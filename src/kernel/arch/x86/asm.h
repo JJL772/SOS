@@ -20,6 +20,8 @@ extern os_cpuid_data_t  		os_cpuid_data;
 extern os_multiboot_data_t      os_multiboot_data;
 extern os_gdt_t					os_gdt_base;
 extern os_idt_t                 os_idt_base;
+extern int						os_kernel_page_directory_end;
+extern int						os_kernel_page_directory;
 
 extern bool __attribute__((stdcall)) os_setup_idt();
 extern void __attribute__((stdcall)) os_setup_gdt();

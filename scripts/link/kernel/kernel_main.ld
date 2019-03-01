@@ -11,18 +11,24 @@ Notes:
 ENTRY(_boot)
 
 SECTIONS {
-	. = 1M;
+	. = 0x80000
 
 	/*
 
 	Kernel page table
 
 	*/
-	os_kernel_pagetbl = .;
+	os_kernel_page_directory = .;
 	.bss BLOCK(4k) : ALIGN(4k)
 	{
 		*(.pgtbl)
 	}
+	os_kernel_page_directory_end = .;
+
+
+
+	. = 1M;
+
 	/*
 
 	Descriptor table sections
@@ -30,7 +36,7 @@ SECTIONS {
 	*/
 	/* Base of IDT */
 	os_idt_base = .;
-	.bss BLOCK(2k) : ALIGN(2k)
+	.bss BLOCK(4k) : ALIGN(4k)
 	{
 		*(.idt)
 	} = 0x0;
@@ -39,7 +45,7 @@ SECTIONS {
 
 	/* Base of GDT */
 	os_gdt_base = .;
-	.bss BLOCK(2k) : ALIGN(2k)
+	.bss BLOCK(4k) : ALIGN(4k)
 	{
 		*(.gdt)
 	} = 0x0; /* Fill remaining with */

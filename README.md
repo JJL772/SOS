@@ -22,3 +22,9 @@ The low kernel abstraction layers
 
 #### src/kernel/arch/x86/ 
 Abstraction layer for the x86 architecture
+
+## Notes
+
+### Note on function handling
+Most functions in the high kernel are defined as variables, as this allows for the low kernel to do runtime-specific stuff.
+Long story short, if you want to support old processors AND support SIMD vectorization for things, you need a way to determine SIMD support during runtime.
