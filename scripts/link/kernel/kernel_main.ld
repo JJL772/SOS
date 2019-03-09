@@ -45,7 +45,7 @@ SECTIONS {
 
 	/* Base of GDT */
 	os_gdt_base = .;
-	.bss BLOCK(4k) : ALIGN(4k)
+	.bss BLOCK(8k) : ALIGN(4k)
 	{
 		*(.gdt)
 	} = 0x0; /* Fill remaining with */
