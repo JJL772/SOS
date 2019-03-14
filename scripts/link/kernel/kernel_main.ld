@@ -11,19 +11,21 @@ Notes:
 ENTRY(_boot)
 
 SECTIONS {
-	. = 0x80000
+	. = 0x80000;
 
 	/*
 
 	Kernel page table
 
 	*/
-	os_kernel_page_directory = .;
-	.bss BLOCK(4k) : ALIGN(4k)
+	
+	.bss BLOCK(4K) : ALIGN(4K)
 	{
+		os_kernel_page_directory = .;
 		*(.pgtbl)
+		os_kernel_page_directory_end = .;
 	}
-	os_kernel_page_directory_end = .;
+	
 
 
 
@@ -35,22 +37,25 @@ SECTIONS {
 
 	*/
 	/* Base of IDT */
-	os_idt_base = .;
-	.bss BLOCK(4k) : ALIGN(4k)
+	
+	.bss BLOCK(4k) : ALIGN(4k) 
 	{
-		*(.idt)
-	} = 0x0;
+		os_idt_base = .;
+		*(.idt)	
+		os_idt_limit = .;
+	} = 0x0
 	/* Limit of IDT */
-	os_idt_limit = .;
+
 
 	/* Base of GDT */
-	os_gdt_base = .;
 	.bss BLOCK(8k) : ALIGN(4k)
-	{
+	{	
+		os_gdt_base = .;
 		*(.gdt)
-	} = 0x0; /* Fill remaining with */
+		os_gdt_limit = . - os_gdt_base;
+	} = 0x0 /* Fill remaining with */
 	/* Limit of GDT */
-	os_gdt_limit = . - os_gdt_base;
+	
 
 	/*
 
@@ -58,13 +63,15 @@ SECTIONS {
 
 	*/
 	/* Base addr of stack, aka the lowest addr of the stack */
-	os_stack_base = .;
+	
 	.bss BLOCK(16k) : ALIGN(8k)
 	{
+		os_stack_base = .;
 		*(.stack)
-	} = 0x0;
+		os_stack_top = .;
+	} = 0x0
 	/* Top of stack, grows downwards */
-	os_stack_top = .;
+	
 
 	/* 8kb of boot code */
 	.text BLOCK(8K) : ALIGN(8K)

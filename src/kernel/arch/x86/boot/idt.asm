@@ -26,6 +26,7 @@ extern ivt_ud
 extern ivt_ve
 extern ivt_xm
 extern ivt_ss
+extern ivt_np
 extern os_idt_base
 extern os_idt_limit
 extern os_idt_descriptor
@@ -55,14 +56,16 @@ section .boot
 		mov ebp, esp
 
 		mov DWORD ecx, [ebp-4]
-		mov WORD edx, [ebp-8]
+		mov WORD dx, [ebp-8]
 
 		mov eax, [ebp-32]
 		mov WORD [eax], cx
-		mov WORD [eax+2], edx
+		mov WORD [eax+2], dx
 		mov BYTE [eax+4], 0
 		mov BYTE [eax+5], 0b10001110
-		mov WORD [eax+6], [ebp-8]
+		mov WORD dx, [ebp-8]
+		mov WORD [eax+6], dx
+		;movsw WORD [eax+6], [ebp-8]
 		mov ecx, eax
 		mov DWORD eax, [eax]
 		mov DWORD edx, [eax+4]
@@ -81,10 +84,12 @@ section .boot
 
 		mov eax, [ebp-32]
 		mov WORD [eax], cx
-		mov WORD [eax+2], edx
+		mov WORD [eax+2], dx
 		mov BYTE [eax+4], 0
 		mov BYTE [eax+5], 0b10001111
-		mov WORD [eax+6], [ebp-8]
+		mov WORD dx, [ebp-8]
+		mov WORD [eax+6], dx
+		;movsw [eax+6], [ebp-8]
 		mov ecx, eax
 		mov DWORD eax, [eax]
 		mov DWORD edx, [eax+4]
@@ -96,8 +101,10 @@ section .boot
 		push ebp
 		mov ebp, esp
 
-		test eflags, 0x200
+		pushfd
+		test DWORD [ebp-4], 0x200
 		jnz .ERR
+		add ebp, 4 ;Remove flags from stack
 
 		; Create entry for system call
 		push DWORD ivt_sys

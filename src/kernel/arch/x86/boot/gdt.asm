@@ -29,7 +29,8 @@ section .boot
 		mov ebp, esp
 
 		; First descriptor should be 0
-		mov QWORD [os_gdt_base], 0
+		mov DWORD [os_gdt_base], 0
+		mov DWORD [os_gdt_base+4], 0
 
 		mov DWORD eax, os_gdt_base
 

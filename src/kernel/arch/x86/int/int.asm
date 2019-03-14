@@ -23,8 +23,7 @@ global ivt_ud
 global ivt_ve
 global ivt_xm
 global ivt_ss
-
-extern 
+global ivt_np 
 
 section .inthandler
 
@@ -80,4 +79,7 @@ section .inthandler
 		iret
 
 	ivt_ss:
+		iret
+		
+	ivt_np:
 		iret

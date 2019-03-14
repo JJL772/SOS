@@ -10,9 +10,11 @@
 %define EBOOTLOADER_UEFI		2
 
 %define CREATE_GDT_SEGMENT_SELECTOR(index, rpl) 	((((index << 3) & 0xFFF8) | (rpl & 0x2)))
+
 %define MAKE_GDT_SEGMENT_SELECTOR(index, rpl) 		((((index << 3) & 0xFFF8) | (rpl & 0x2)))
 
 %define CREATE_LDT_SEGMENT_SELECTOR(index, rpl)		((((index << 3) & 0xFFF8) | (rpl & 0x2)) | 0x4)
+
 %define MAKE_LDT_SEGMENT_SELECTOR(index, rpl)		((((index << 3) & 0xFFF8) | (rpl & 0x2)) | 0x4)
 
 %define KERNEL_DPL      0b00

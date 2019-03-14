@@ -34,6 +34,10 @@ extern os_bootloader_type
 extern os_cpuid_data
 extern os_cpuid_vendor
 extern os_multiboot_ptr
+extern os_select_cs_segment
+extern os_select_ds_segment
+extern os_setup_gdt
+extern os_setup_idt
 ;==================================
 
 section .stack
@@ -115,7 +119,7 @@ section .boot
 		;						   v 		vvvv vvv	 v
 		;mov eax, 0b0000_0000_0000_0100_0000_1111_1110_0001
 
-		mov eax, CR4_OSXSAVE_MASK | CR4_UMIP_MASK | CR4_OSXMMEXCPT_MASK | CR4_OSFXR_MASK | CR4_PCE_MASK | CR4_MCE_MASK
+		mov eax, CR4_OSXSAVE_MASK | CR4_UMIP_MASK | CR4_OSXMMEXCPT_MASK | CR4_OSFXSR_MASK | CR4_PCE_MASK | CR4_MCE_MASK
 		mov ebx, cr4
 		or eax, ebx
 		mov cr4, eax
