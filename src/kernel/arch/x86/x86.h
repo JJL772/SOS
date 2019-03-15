@@ -181,7 +181,7 @@ struct FPU_POINTER_REG
 	struct WORD_REG High;
 };
 
-typedef DQWORD_REG XMM_REG;
+typedef struct DQWORD_REG XMM_REG;
 
 struct YMM_REG
 {
@@ -189,9 +189,9 @@ struct YMM_REG
 	struct DQWORD_REG High;
 };
 
-typedef CR5_7_t CR5_t;
-typedef CR5_7_t CR6_t;
-typedef CR5_7_t CR7_t;
+typedef struct CR5_7_t CR5_t;
+typedef struct CR5_7_t CR6_t;
+typedef struct CR5_7_t CR7_t;
 
 typedef unsigned char AL_t;
 typedef unsigned char AH_t;
@@ -249,13 +249,6 @@ struct task_descriptor_t
 	WORD 	limit_low		:	16;
 };
 
-struct task_descriptor_t INIT_TASK_DESCRIPTOR(struct task_descriptor_t& desc)
-{
-	(*(QWORD*)&desc) = 0;
-	*(((BYTE*)&desc) + 5) |= 0b10010000;
-	return desc;
-}
-
 //
 // TASK GATE DESCRIPTOR DEFINITION/FUNCTIONS
 //
@@ -270,13 +263,6 @@ struct task_gate_descriptor_t
 	WORD 	tss_sel 		:	16;
 	WORD 	_r5				:	16;
 };
-
-struct task_gate_descriptor_t INIT_TASK_GATE_DESCRIPTOR(struct task_gate_descriptor_t& desc)
-{
-	(*(QWORD*)&desc) = 0;
-	*(((BYTE*)&desc) + 5) |= 0b10100000;
-	return desc;
-}
 
 //
 // 16-bit TSS, for compat with virtual 8086 mode
@@ -439,11 +425,11 @@ struct idt_trap_gate_t
 	int OFFSET2 : 16;
 };
 
-void LoadCR0(CR0_t cr0);
-void LoadCR1(CR1_t cr1);
-void LoadCR2(CR2_t cr2);
-void LoadCR3(CR3_t cr3);
-void LoadCR4(CR4_t cr4);
+void LoadCR0(struct CR0_t cr0);
+void LoadCR1(struct CR1_t cr1);
+void LoadCR2(struct CR2_t cr2);
+void LoadCR3(struct CR3_t cr3);
+void LoadCR4(struct CR4_t cr4);
 
 typedef enum
 {
@@ -594,7 +580,7 @@ struct CPUID_t
 	uint8_t			_r11		:	2;		//EAX = 7, EDX bit 0
 	uint8_t			avx5124vnniw:	1;
 	uint8_t			avx5124fmaps:	1;
-	uint8_t			_r12		:  14;
+	uint16_t			_r12		:  14;
 	uint8_t			pconfig 	:	1;
 	uint8_t			_r13		:	7;
 	uint8_t			spec_ctrl	:	1;

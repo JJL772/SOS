@@ -9,7 +9,7 @@ THIS FILE SHOULD HAVE NO DEPENDENCIES ON ANY OTHER FILES
 */
 #ifndef _COMMON_H_
 #define _COMMON_H_
-#if !defined(_ARCH_X86_) && !defined(_HIGH_KERNEL_)
+#if defined(_ARCH_X86_) && !defined(_HIGH_KERNEL_)
 
 #define SECTION_BOOT_CODE 				__attribute__((section(".boot")))
 #define SECTION_BOOT_DATA 				__attribute__((section(".bootdata")))

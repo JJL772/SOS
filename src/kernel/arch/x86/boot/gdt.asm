@@ -11,6 +11,8 @@
 ; Globals
 global os_select_segment
 global os_setup_gdt
+global os_select_ds_segment
+global os_select_cs_segment
 ;global os_gdt_base
 extern os_gdt_base
 extern os_gdt_limit

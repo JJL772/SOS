@@ -4,6 +4,13 @@
 ; Variable defs
 ;
 
+global os_bootloader_type
+global os_cpuid_vendor
+global os_cpuid_data
+global os_multiboot_data
+global os_multiboot_ptr
+global os_idt_descriptor
+
 ;Boot data
 section .bootbss
 	os_bootloader_type:		resb	1	; Type of bootloader used to load OS

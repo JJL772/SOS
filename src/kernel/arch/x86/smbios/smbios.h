@@ -38,7 +38,7 @@ typedef struct smbios_uuid
 
 typedef struct smbios_entrypoint
 {
-	BYTE anchor[4] = {0x5F, 0x53, 0x4D, 0x5F}; //_SM_
+	BYTE anchor[4]; //_SM_
 	BYTE checksum;
 	BYTE entrypoint_length;
 	BYTE major_version;
@@ -46,7 +46,7 @@ typedef struct smbios_entrypoint
 	WORD max_struct_size;
 	BYTE entrypoint_revision;
 	BYTE formatted_area[5];
-	BYTE intermediate_anchor[5] = {0x5F, 0x44, 0x4D, 0x49, 0x5F}; //_DMI_
+	BYTE intermediate_anchor[5]; //_DMI_
 	BYTE intermediate_checksum;
 	WORD struct_tbl_length;
 	DWORD struct_tbl_addr;
@@ -56,7 +56,7 @@ typedef struct smbios_entrypoint
 
 typedef struct smbios_bios_info
 {
-	BYTE type = SMBIOS_BIOS_INFO_STRUCT_TYPE;
+	BYTE type;
 	BYTE length;
 	WORD handle;
 	BYTE vendor_string;
@@ -75,7 +75,7 @@ typedef struct smbios_bios_info
 
 typedef struct smbios_system_info
 {
-	BYTE type = SMBIOS_SYS_INFO_STRUCT_TYPE;
+	BYTE type;
 	BYTE length;
 	WORD handle;
 	BYTE manufacturer;
@@ -91,7 +91,7 @@ typedef struct smbios_system_info
 
 typedef struct smbios_module_info
 {
-	BYTE type = SMBIOS_MOD_INFO_STRUCT_TYPE;
+	BYTE type;
 	BYTE length;
 	WORD handle;
 	BYTE manufacturer;
@@ -109,7 +109,7 @@ typedef struct smbios_module_info
 
 typedef struct smbios_enclosure_info
 {
-	BYTE type = SMBIOS_ENCLOSURE_INFO_STRUCT_TYPE;
+	BYTE type;
 	BYTE length;
 	WORD handle;
 	BYTE manufacturer;
@@ -132,7 +132,7 @@ typedef struct smbios_enclosure_info
 
 typedef struct smbios_processor_info
 {
-	BYTE type = SMBIOS_PROCESSOR_INFO_STRUCT_TYPE;
+	BYTE type;
 	BYTE length;
 	WORD handle;
 	BYTE socket_designation;
@@ -165,7 +165,7 @@ typedef struct smbios_processor_info
 
 typedef struct smbios_cache_info
 {
-	BYTE type = SMBIOS_CACHE_INFO_STRUCT_TYPE;
+	BYTE type;
 	BYTE length;
 	WORD handle;
 	BYTE socket_designation;
@@ -184,7 +184,7 @@ typedef struct smbios_cache_info
 
 typedef struct smbios_port_conn_info
 {
-	BYTE type = SMBIOS_PORT_CONN_INFO_STRUCT_TYPE;
+	BYTE type;
 	BYTE length;
 	WORD handle;
 	BYTE int_ref_designator;
@@ -196,7 +196,7 @@ typedef struct smbios_port_conn_info
 
 typedef struct smbios_sys_slots
 {
-	BYTE type = SMBIOS_SYS_SLOTS_STRUCT_TYPE;
+	BYTE type;
 	BYTE length;
 	WORD handle;
 	BYTE slot_designation;
@@ -217,7 +217,7 @@ typedef struct smbios_sys_slots
 
 typedef struct smbios_oem_strings
 {
-	BYTE type = SMBIOS_OEM_STRINGS_STRUCT_TYPE;
+	BYTE type;
 	BYTE length;
 	WORD handle;
 	BYTE count;
@@ -225,7 +225,7 @@ typedef struct smbios_oem_strings
 
 typedef struct smbios_sys_config_opts
 {
-	BYTE type = SMBIOS_SYS_CONFIG_OPTS_STRUCT_TYPE;
+	BYTE type;
 	BYTE length;
 	WORD handle;
 	BYTE count;
@@ -233,7 +233,7 @@ typedef struct smbios_sys_config_opts
 
 typedef struct smbios_bios_lang_info
 {
-	BYTE type = SMBIOS_BIOS_LANG_INFO_STRUCT_TYPE;
+	BYTE type;
 	BYTE length;
 	WORD handle;
 	BYTE installable_langs;

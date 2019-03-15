@@ -85,21 +85,26 @@ CLANG_FLAGS			=	-m32 -fno-stack-protector -w -nostartfiles -nodefaultlibs -mcpu=
 #
 #=========================================#
 C_SRC	=	$(wildcard $(KERNEL_ARCH_DIR)/int/*.c)	\
-			$(wildcard $(KERNEL_ARCH_DIR)/*.c)
+			$(wildcard $(KERNEL_ARCH_DIR)/*.c)		\
+			$(wildcard $(KERNEL_ARCH_DIR)/boot/*.c)	\
+			$(wildcard $(KERNEL_ARCH_DIR)/task/*.c)	\
+			$(wildcard $(KERNEL_ARCH_DIR)/int/*.c)	\
+			$(wildcard $(KERNEL_ARCH_DIR)/smbios/*.c)	\
+			$(wildcard $(KERNEL_ARCH_DIR)/paging/*.c)
 
 ASM_SRC	=	$(wildcard $(KERNEL_ARCH_DIR)/*.asm)		\
 			$(wildcard $(KERNEL_ARCH_DIR)/boot/*.asm)	\
 			$(wildcard $(KERNEL_ARCH_DIR)/paging/*.asm)	\
-			$(wildcard $(KERnEL_ARCH_DIR)/int/*.asm)
+			$(wildcard $(KERNEL_ARCH_DIR)/int/*.asm)
 		
-ASM_OBJ =	$(ASM_SRC:.asm=.o)
+OBJECTS =	$(ASM_SRC:.asm=.o) $(C_SRC:.c=.o)
 #=========================================#
 # 
 # Rules
 #
 #=========================================#
 
-all: $(build)
+all: $(KERNEL_OUTPUT_FILE)
 
 build: $(KERNEL_OUTPUT_FILE)
 
@@ -109,49 +114,28 @@ build: $(KERNEL_OUTPUT_FILE)
 	@mkdir -p $(dir $(INTERMEDIATE_DIR)/$@)
 	$(AS) $(PREPROCESSOR_DEFS) -I$(KERNEL_ARCH_DIR)/ -I$(KERNEL_ARCH_DIR)/int/ -I$(KERNEL_ARCH_DIR)/paging/ -f $(NASM_OBJ_FORMAT) -o $(INTERMEDIATE_DIR)/$@ $^
 
-
-
-$(INTERMEDIATE_DIR)/arch/boot/%.o: $(KERNEL_ARCH_DIR)/boot/%.asm
+%.o: %.c
+	@echo
 	@echo Building $@
-	$(AS) $(PREPROCESSOR_DEFS) -I$(KERNEL_ARCH_DIR)/ -I$(KERNEL_ARCH_DIR)/int/ -I$(KERNEL_ARCH_DIR)/paging/ -f $(NASM_OBJ_FORMAT) -o $@ $^
+	@mkdir -p $(dir $(INTERMEDIATE_DIR)/$@)
+	$(CC) $(PREPROCESSOR_DEFS) $(INCLUDE_DIRECTORIES) $(CLANG_FLAGS) -o $(INTERMEDIATE_DIR)/$@ $^
 
-
-$(INTERMEDIATE_DIR)/arch/int/%.o: $(KERNEL_ARCH_DIR)/int/%.asm
-	@echo Building $@
-	$(AS) $(PREPROCESSOR_DEFS) -I$(KERNEL_ARCH_DIR)/ -I$(KERNEL_ARCH_DIR)/int/ -I$(KERNEL_ARCH_DIR)/paging/ -f $(NASM_OBJ_FORMAT) -o $@ $%
-
-
-$(INTERMEDIATE_DIR)/arch/paging/%.o: $(KERNEL_ARCH_DIR)/paging/%.asm
-	@echo Building $@
-	$(AS) $(PREPROCESSOR_DEFS) -I$(KERNEL_ARCH_DIR)/ -I$(KERNEL_ARCH_DIR)/int/ -I$(KERNEL_ARCH_DIR)/paging/ -f $(NASM_OBJ_FORMAT) -o $@ $%
-
-$(INTERMEDIATE_DIR)/asm/%.o: $(KERNEL_ARCH_DIR)/paging/%.asm $(KERNEL_ARCH_DIR)/int/%.asm $(KERNEL_ARCH_DIR)/boot/%.asm
-	@echo Building $@
-	$(AS) $(PREPROCESSOR_DEFS) -I$(KERNEL_ARCH_DIR)/ -I$(KERNEL_ARCH_DIR)/int/ -I$(KERNEL_ARCH_DIR)/paging/ -f $(NASM_OBJ_FORMAT) -o $@ $%
-	
-$(INTERMEDIATE_DIR)/kernel.o: $(C_SRC)
-	@echo Building $@
-	$(CC) $(PREPROCESSOR_DEFS) $(INCLUDE_DIRECTORIES) $(CLANG_FLAGS) -o $@ $^
-	
-$(KERNEL_OUTPUT_FILE): $(ASM_OBJ)
+%.elf: %.o
+	@echo
 	@echo Linking $@
-	$(LD) $(LINKER_FLAGS) -o $@ $%
+	@mkdir -p $(OUTPUT_DIR)
+	$(LD) $(LINKER_FLAGS) $^
+	
+$(KERNEL_OUTPUT_FILE): $(OBJECTS)
+	@echo
+	@echo Linking $@
+	@mkdir -p $(OUTPUT_DIR)
+	$(LD) $(LINKER_FLAGS) -o $@ $(addprefix $(INTERMEDIATE_DIR)/, $^)
 	
 
 .PHONY: clean
 clean:
-	rm $(ISO_OUTPUT_FILE)
-	rm $(KERNEL_OUTPUT_FILE)
-	rm $(ASM_OBJ_FILE)
-	rm $(CLANG_OBJ_FILE)
+	@echo Cleaing...
+	rm -rf $(INTERMEDIATE_DIR)
 
-rebuild: $(clean) $(build)
-
-$(INTERMEDIATE_DIR):
-	mkdir $(INTERMEDIATE_DIR)
-
-$(OUTPUT_DIR):
-	mkdir $(OUTPUT_DIR)
-
-$(DISK_IMAGE_DIR):
-	mkdir $(DISK_IMAGE_DIR)
+rebuild: $(clean) $(KERNEL_OUTPUT_FILE)

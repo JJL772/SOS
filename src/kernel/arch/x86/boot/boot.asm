@@ -8,7 +8,7 @@
 %include "common.asm"
 
 ;Entry point
-global _start
+global _boot
 
 ;==================================
 ;External symbols
