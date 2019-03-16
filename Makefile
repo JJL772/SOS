@@ -1,6 +1,6 @@
 #=========================================#
 # 
-# Main makefile for the kernel
+# Main makefile for the i386 kernel
 #
 #=========================================#
 
@@ -10,18 +10,12 @@
 #
 #=========================================#
 NASM_CMD			=	nasm
-
 CLANG_CMD			=	clang
-
-CC				=	clang
-
+CC					=	clang
 LINKER_CMD			=	ld
-
-LD				=	ld
-
-AS				=	nasm
-
-GEN_ISO_IMAGE_CMD	=	genisoimage
+LD					=	ld
+AS					=	nasm
+GENISOIMAGE			=	genisoimage
 
 #=========================================#
 # 
@@ -29,18 +23,21 @@ GEN_ISO_IMAGE_CMD	=	genisoimage
 #
 #=========================================#
 INTERMEDIATE_DIR	=	obj
-
-OUTPUT_DIR			=	build/i386
-
+I386_BUILD_DIR		=	build/i386
+AMD64_BUILD_DIR		=	build/x64
+OUTPUT_DIR			=	$(I386_BUILD_DIR)
 DISK_IMAGE_DIR		=	iso
-
 KERNEL_ISO_BIN		=	$(ISO)/boot/$(KERNEL_FILENAME)
-
 ISO_OUTPUT			=	$(OUTPUT_DIR)/
-
 KERNEL_SRC_DIR		=	src/kernel
+KERNEL_I386_ARCH_DIR		=	$(KERNEL_SRC_DIR)/arch/x86
+KERNEL_AMD64_ARCH_DIR		=	$(KERNEL_SRC_DIR)/arch/x64
 
-KERNEL_ARCH_DIR		=	$(KERNEL_SRC_DIR)/arch/x86
+ifeq ($(BUILD_TYPE), i386)
+	KERNEL_ARCH_DIR = $(KERNEL_I386_ARCH_DIR)
+else
+	KERNEL_ARCH_DIR = $(KERNEL_AMD64_ARCH_DIR)
+endif
 
 #=========================================#
 # 
@@ -60,23 +57,21 @@ ASM_OBJ_FILE		=	$(INTERMEDIATE_DIR)/kernel/kernel_asm_obj.o
 # General build settings
 #
 #=========================================#
-PREPROCESSOR_DEFS	=	-D_KERNEL_BUILD=1 -DARCH_X86=1 -D_I386=1 -D_X86_=1 -D_ARCH_X86_=1
+PREPROCESSOR_DEFS_I386	=	-D_KERNEL_BUILD=1 -DARCH_X86=1 -D_I386=1 -D_X86_=1 -D_ARCH_X86_=1
+PREPROCESSOR_DEFS_AMD64	=	-D_KERNEL_BUILD=1 -DARCH_AMD64 -D_ARCH_X64_=1 -D_ARCH_AMD64_=1
 
-INCLUDE_DIRECTORIES	=	-I$(KERNEL_SRC_DIR)/ -I$(KERNEL_ARCH_DIR)/ -I$(KERNEL_ARCH_DIR)/int/ -I$(KERNEL_ARCH_DIR)/boot/ -I$(KERNEL_ARCH_DIR)/paging/
-
+INCLUDE_DIRECTORIES_I386	=	-I$(KERNEL_SRC_DIR)/ -I$(KERNEL_I386_ARCH_DIR)/ -I$(KERNEL_I386_ARCH_DIR)/int/ -I$(KERNEL_I386_ARCH_DIR)/boot/ -I$(KERNEL_I386_ARCH_DIR)/paging/
+INCLUDE_DIRECTORIES_AMD64	=	-I$(KERNEL_SRC_DIR)/ -I$(KERNEL_AMD64_ARCH_DIR)/ -I$(KERNEL_AMD64_ARCH_DIR)/int/ -I$(KERNEL_AMD64_ARCH_DIR)/boot/ -I$(KERNEL_AMD64_ARCH_DIR)/paging/
 #=========================================#
 # 
 # Flags
 #
 #=========================================#
 GEN_ISO_FLAGS		=	-R -b iso/boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A os -input-charset-utf8 
-
-NASM_OBJ_FORMAT		=	elf32
-
+NASM_OBJ_FORMAT_I386		=	elf32
+NASM_OBJ_FORMAT_AMD64		=	amd64
 NASM_FLAGS			=	-f $(NASM_OBJ_FORMAT)
-
-LINKER_FLAGS		=	-nostdlib -melf_i386 -T $(LINKER_SCRIPT)
-
+LINKER_FLAGS_I386		=	-nostdlib -melf_i386 -T $(LINKER_SCRIPT)
 CLANG_FLAGS			=	-m32 -fno-stack-protector -w -nostartfiles -nodefaultlibs -mcpu=i386
 
 #=========================================#
@@ -108,34 +103,52 @@ all: $(KERNEL_OUTPUT_FILE)
 
 build: $(KERNEL_OUTPUT_FILE)
 
+ifeq ($(BUILD_TYPE), i386)
+
 %.o: %.asm
 	@echo
 	@echo Building $@
 	@mkdir -p $(dir $(INTERMEDIATE_DIR)/$@)
-	$(AS) $(PREPROCESSOR_DEFS) -I$(KERNEL_ARCH_DIR)/ -I$(KERNEL_ARCH_DIR)/int/ -I$(KERNEL_ARCH_DIR)/paging/ -f $(NASM_OBJ_FORMAT) -o $(INTERMEDIATE_DIR)/$@ $^
+	$(AS) $(PREPROCESSOR_DEFS_I386) $(INCLUDE_DIRECTORIES_I386) -f $(NASM_OBJ_FORMAT_I386) -o $(INTERMEDIATE_DIR)/$@ $^
 
 %.o: %.c
 	@echo
 	@echo Building $@
 	@mkdir -p $(dir $(INTERMEDIATE_DIR)/$@)
-	$(CC) $(PREPROCESSOR_DEFS) $(INCLUDE_DIRECTORIES) $(CLANG_FLAGS) -o $(INTERMEDIATE_DIR)/$@ $^
+	$(CC) $(PREPROCESSOR_DEFS_I386) $(INCLUDE_DIRECTORIES_I386) $(CLANG_FLAGS) -o $(INTERMEDIATE_DIR)/$@ $^
 
 %.elf: %.o
 	@echo
 	@echo Linking $@
-	@mkdir -p $(OUTPUT_DIR)
-	$(LD) $(LINKER_FLAGS) $^
+	@mkdir -p $(I386_BUILD_DIR)
+	$(LD) $(LINKER_FLAGS_I386) $^
 	
 $(KERNEL_OUTPUT_FILE): $(OBJECTS)
 	@echo
 	@echo Linking $@
-	@mkdir -p $(OUTPUT_DIR)
-	$(LD) $(LINKER_FLAGS) -o $@ $(addprefix $(INTERMEDIATE_DIR)/, $^)
-	
+	@mkdir -p $(I386_BUILD_DIR)
+	$(LD) $(LINKER_FLAGS_I386) -o $@ $(addprefix $(INTERMEDIATE_DIR)/, $^)
+	@echo Copying to $(dir $(KERNEL_ISO_BIN))
+	@mkdir -p $(dir $(KERNEL_ISO_BIN))
+	@cp $(KERNEL_OUTPUT_FILE) $(KERNEL_ISO_BIN)
+	@echo Wrote $@
+	@echo Done!
+
+$(ISO_OUTPUT): $(KERNEL_OUTPUT_FILE)
+	@echo 
+	@echo Generating ISO image: $@
+	$(GENISOIMAGE) $(GEN_ISO_FLAGS) -o $(ISO_OUTPUT) $(DISK_IMAGE_DIR)
+	@echo Wrote $@
+	@echo Done!
 
 .PHONY: clean
 clean:
-	@echo Cleaing...
+	@echo Cleaing $(INTERMEDIATE_DIR)
 	rm -rf $(INTERMEDIATE_DIR)
+	@echo Cleaning $(I386_BUILD_DIR)
+	rm -rf $(I386_BUILD_DIR)
+	@echo Done!
+
+endif
 
 rebuild: $(clean) $(KERNEL_OUTPUT_FILE)
