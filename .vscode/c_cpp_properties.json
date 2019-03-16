@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "intelliSenseMode": "clang-x64"
+        },
+        {
+            "name": "SOS-i386",
+            "includePath": [
+                "${workspaceFolder}/src/kernel/",
+                "${workspaceFolder}/src/kernel/arch/x86/"
+            ],
+            "defines": ["_KERNEL_BUILD", "ARCH_X86", "_I386", "_X86_", "_ARCH_X86_"],
+            "cStandard": "c99",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
