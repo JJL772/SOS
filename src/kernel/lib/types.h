@@ -7,6 +7,8 @@ Type definitions for use in the kernel
 
 
 */
+#ifndef _TYPES_H_
+#define _TYPES_H_
 
 typedef char int8_t;
 typedef unsigned char uint8_t;
@@ -31,3 +33,5 @@ typedef unsigned int pid_t;
 
 //Process Handles
 typedef void* handle_t;
+
+#endif

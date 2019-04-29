@@ -16,3 +16,8 @@ struct page_section_descriptor
 	void* base;
 	int used;
 };
+
+void os_load_page_table_4k(void* page_directory, void* page_table)
+{
+	
+}

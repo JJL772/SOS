@@ -457,7 +457,7 @@ typedef enum
 } CPUID_VENDOR_t;
 
 //used to store info about the CPU identification
-struct CPUID_t
+typedef struct CPUID_t
 {
 	//uint16_t /*CPUID_VENDOR_t*/ 	vendor;
 	uint8_t 		fpu			:	1; 		//EAX = 1, EDX bit 0

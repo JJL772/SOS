@@ -14,7 +14,7 @@
 #include "../common.h"
 
 //PROC(unsigned EFLAGS, unsigned short CS, unsigned EIP, int ERR_CODE)
-typedef void(*interrupt_proc)(unsigned int, unsigned short, unsigned int, int);
+//typedef void(*interrupt_proc)(unsigned int, unsigned short, unsigned int, int);
 
 /*
 //Interrupt procedures

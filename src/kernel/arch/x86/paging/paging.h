@@ -9,6 +9,7 @@ Paging functions
 #define _PAGING_H_
 
 #include "../common.h"
+#include "../x86.h"
 
 /* Masks for page flags */
 #define PAGE_FLAG_P		0

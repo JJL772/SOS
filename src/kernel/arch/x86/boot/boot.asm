@@ -61,6 +61,9 @@ section .boot
 	_boot:
 		cli ;disable all interrupts for crtitical section of boot, should already be disabled
 
+		mov DWORD eax, 0xB8000
+		mov WORD [eax], 0xFFAA
+
 		; Save multiboot stuff, ASAP
 		cmp eax, 0x2BADB002
 		je .MULTIBOOT

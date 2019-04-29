@@ -246,7 +246,8 @@ section .boot
 		mov DWORD [os_idt_base+160], eax
 		mov DWORD [os_idt_base+164], edx
 
-		mov WORD [os_idt_descriptor], os_idt_limit
+		mov DWORD eax, os_idt_limit
+		mov WORD [os_idt_descriptor], ax
 		mov DWORD [os_idt_descriptor+2], os_idt_base
 		lidt [os_idt_descriptor]
 
