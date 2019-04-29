@@ -11,7 +11,7 @@
 #=========================================#
 NASM_CMD			=	nasm
 CLANG_CMD			=	clang
-CC					=	clang
+CC					=	gcc
 LINKER_CMD			=	ld
 LD					=	ld
 AS					=	nasm
@@ -26,9 +26,9 @@ INTERMEDIATE_DIR	=	obj
 I386_BUILD_DIR		=	build/i386
 AMD64_BUILD_DIR		=	build/x64
 OUTPUT_DIR			=	$(I386_BUILD_DIR)
-DISK_IMAGE_DIR		=	iso
-KERNEL_ISO_BIN		=	$(ISO)/boot/$(KERNEL_FILENAME)
-ISO_OUTPUT			=	$(OUTPUT_DIR)/
+DISK_IMAGE_DIR		=	iso/
+KERNEL_ISO_BIN		=	iso/boot/$(KERNEL_FILENAME)
+ISO_OUTPUT			=	$(OUTPUT_DIR)/sos.iso
 KERNEL_SRC_DIR		=	src/kernel
 KERNEL_I386_ARCH_DIR		=	$(KERNEL_SRC_DIR)/arch/x86
 KERNEL_AMD64_ARCH_DIR		=	$(KERNEL_SRC_DIR)/arch/x64
@@ -67,12 +67,12 @@ INCLUDE_DIRECTORIES_AMD64	=	-I$(KERNEL_SRC_DIR)/ -I$(KERNEL_AMD64_ARCH_DIR)/ -I$
 # Flags
 #
 #=========================================#
-GEN_ISO_FLAGS		=	-R -b iso/boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -A os -input-charset-utf8 
+GEN_ISO_FLAGS		=	-R -b boot/grub/stage2_eltorito -V SOS -boot-info-table -no-emul-boot -boot-load-size 4 -A os 
 NASM_OBJ_FORMAT_I386		=	elf32
 NASM_OBJ_FORMAT_AMD64		=	amd64
 NASM_FLAGS			=	-f $(NASM_OBJ_FORMAT)
-LINKER_FLAGS_I386		=	-nostdlib -melf_i386 -T $(LINKER_SCRIPT)
-CLANG_FLAGS			=	-m32 -fno-stack-protector -w -nostartfiles -nodefaultlibs -mcpu=i386
+LINKER_FLAGS_I386		=	-nostdlib -melf_i386 -T $(LINKER_SCRIPT) -x
+CLANG_FLAGS			=	-m32 -fno-stack-protector -w -nostartfiles -nodefaultlibs
 
 #=========================================#
 # 
@@ -140,6 +140,8 @@ $(ISO_OUTPUT): $(KERNEL_OUTPUT_FILE)
 	$(GENISOIMAGE) $(GEN_ISO_FLAGS) -o $(ISO_OUTPUT) $(DISK_IMAGE_DIR)
 	@echo Wrote $@
 	@echo Done!
+
+mkiso: $(ISO_OUTPUT)
 
 .PHONY: clean
 clean:
