@@ -96,31 +96,10 @@ section .boot
 		;Perform FPU setup tasks
 		call FPU_SETUP
 
-		;		   CR0.PG: Enables paging
-		;		   |							   CR0.NE: Enables native method of FPU error reporting (the good method)
-		;		   |							   |  | 
-		;		   |							   |  | 
-		;		   v							   v  v 
-		;mov eax, 0b1000_0000_0000_0000_0000_0000_0010_0000
-
 		mov eax, CR0_PG_MASK | CR0_NE_MASK
 		mov ebx, cr0
 		or eax, ebx
 		mov cr0, eax
-
-		;
-		;						   CR4.OSXSAVE: Enables XSAVE/XRESTOR instructions
-		;						   |		CR4.UMIP: Disables use of certain instructions like SGDT in usermode
-		;						   |		|CR4.OSXMMEXCPT: Enables exception handling for SIMD extensions
-		;						   |        ||CR4.OSFXSR: Enables the use of FXSAVE and FXRESTOR
-		;						   |        |||CR4.PCE: Enables the use of RDPMC instruction
-		;						   |        |||| CR4.PGE: Sets frequently used pages as global for all users
-		;						   |		|||| |CR4.MCE: Enables machine-check features
-		;						   |        |||| ||CR4.PAE: Enables physical address extensions
-		;						   |		|||| |||     CR4.VME: Enables virtual-8086-mode extensions
-		;						   |        |||| |||	 |
-		;						   v 		vvvv vvv	 v
-		;mov eax, 0b0000_0000_0000_0100_0000_1111_1110_0001
 
 		mov eax, CR4_OSXSAVE_MASK | CR4_UMIP_MASK | CR4_OSXMMEXCPT_MASK | CR4_OSFXSR_MASK | CR4_PCE_MASK | CR4_MCE_MASK
 		mov ebx, cr4
