@@ -1,4 +1,0 @@
-{
-	"python.linting.pylintEnabled": true,
-	"cquery.cacheDirectory": "${workspaceFolder}/.vscode/cquery_cached_index/"
-}
