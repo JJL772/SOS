@@ -23,6 +23,9 @@ The low kernel abstraction layers
 #### src/kernel/arch/x86/ 
 Abstraction layer for the x86 architecture
 
+## Building
+You will need to install the following packages: `python3 nasm clang gcc genisoimage binutils qemu make`
+
 ## Notes
 
 ### Note on function handling
