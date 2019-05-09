@@ -11,7 +11,7 @@ global FPU_SETUP
 
 section .boot
 
-	FPU_SETUP:
+	os_setup_fpu:
 		push ebp
 		mov esp, ebp
 
@@ -47,4 +47,7 @@ section .boot
 	.END:
 		;Retore & return
 		pop ebp
+		ret
+
+	os_setup_fpu_em:
 		ret

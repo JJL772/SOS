@@ -12,24 +12,8 @@ global _boot
 
 ;==================================
 ;External symbols
-extern IVYBRIDGE_SETUP
-extern CANNONLAKE_SETUP
-extern COFFEELAKE_SETUP
-extern KABYLAKE_SETUP
-extern SKYLAKE_SETUP
-extern BROADWELL_SETUP
-extern HASWELL_SETUP
-extern SANDYBRIDGE_SETUP
-extern WESTMERE_SETUP
-extern NEHALEM_SETUP
-extern PENRYN_SETUP
-extern CORE_SETUP
-extern MOD_PENTIUMM_SETUP
-extern PENTIUMM_SETUP
-extern P6_SETUP
-extern I486_SETUP
-extern I386_SETUP
-extern FPU_SETUP
+extern os_setup_fpu
+extern os_setup_fpu_em
 extern os_bootloader_type
 extern os_cpuid_data
 extern os_cpuid_vendor
@@ -38,6 +22,7 @@ extern os_select_cs_segment
 extern os_select_ds_segment
 extern os_setup_gdt
 extern os_setup_idt
+extern os_init_kernel_stack
 ;==================================
 
 section .stack
@@ -66,20 +51,15 @@ section .boot
 
 		; Save multiboot stuff, ASAP
 		cmp eax, 0x2BADB002
-		je .MULTIBOOT
-		jmp .CONT
 		mov BYTE [os_bootloader_type], EBOOTLOADER_UNSPECIFIED
+		jne .CONT
 
-	.MULTIBOOT:
 		mov DWORD [os_multiboot_ptr], ebx
 		mov BYTE [os_bootloader_type], EBOOTLOADER_MULTIBOOT
 
 	.CONT:
-
-		;setup the stack
+		;setup a basic stack for some simple calls
 		mov esp, stack_top
-
-		xor eax, eax
 
 		call os_setup_gdt ; Setup gdt
 
@@ -93,8 +73,26 @@ section .boot
 		call os_select_cs_segment
 
 	.GENERAL_SETUP:
-		;Perform FPU setup tasks
-		call FPU_SETUP
+		mov eax, 1
+		cpuid 
+	
+		test edx, 0
+		jz .FPU_EMULATION
+		call os_setup_fpu
+		jmp .APIC_TEST
+
+	.FPU_EMULATION:
+		call os_setup_fpu_em
+
+	.APIC_TEST:
+		; test for apic
+		test edx, 9
+		jnz .APIC_SETUP
+		
+	.FXSAVE_TEST:
+		; test for fxsave/fxrestor
+		test edx, 24
+		jz .
 
 		mov eax, CR0_PG_MASK | CR0_NE_MASK
 		mov ebx, cr0
@@ -109,13 +107,8 @@ section .boot
 		
 
 
-		
-
+	.APIC_SETUP:
+	
 	.ENABLE_TASKSW:
 		jmp .ENABLE_TASKSW ;dummy
 
-	_EnableAVX512:
-		;Nothing
-
-	_EnableSIMD:
-		;Nothing
