@@ -30,7 +30,7 @@ KERNEL_ISO_BIN		=	iso/boot/$(KERNEL_FILENAME)
 ISO_OUTPUT			=	$(OUTPUT_DIR)/sos.iso
 KERNEL_SRC_DIR		=	src/kernel
 KERNEL_ARCH_DIR		=	$(KERNEL_SRC_DIR)/arch/x86
-
+SRC_DIR			=	src
 #=========================================#
 # 
 # Filename/output settings
@@ -51,7 +51,7 @@ ASM_OBJ_FILE		=	$(INTERMEDIATE_DIR)/kernel/kernel_asm_obj.o
 #=========================================#
 PREPROCESSOR_DEFS_I386	=	-D_KERNEL_BUILD=1 -DARCH_X86=1 -D_I386=1 -D_X86_=1 -D_ARCH_X86_=1
 
-INCLUDE_DIRECTORIES_I386	=	-I$(KERNEL_SRC_DIR)/ -I$(KERNEL_ARCH_DIR)/ -I$(KERNEL_ARCH_DIR)/int/ -I$(KERNEL_ARCH_DIR)/boot/ -I$(KERNEL_ARCH_DIR)/paging/
+INCLUDE_DIRECTORIES_I386	=	-I$(SRC_DIR)/common -I$(KERNEL_SRC_DIR)/ -I$(KERNEL_ARCH_DIR)/ -I$(KERNEL_ARCH_DIR)/int/ -I$(KERNEL_ARCH_DIR)/boot/ -I$(KERNEL_ARCH_DIR)/paging/
 
 #=========================================#
 # 

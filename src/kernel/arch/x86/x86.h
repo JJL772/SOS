@@ -10,7 +10,7 @@ Defines low-level code that can be used in C and stuff
 #define _x86_H
 
 //Included from high kernel
-#include "../../lib/types.h"
+#include "types.h"
 
 //High kernel wont be able to use these structures
 #ifndef _HIGH_KERNEL_

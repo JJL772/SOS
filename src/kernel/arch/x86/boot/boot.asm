@@ -92,7 +92,7 @@ section .boot
 	.FXSAVE_TEST:
 		; test for fxsave/fxrestor
 		test edx, 24
-		jz .
+		jz .FXSAVE_TEST
 
 		mov eax, CR0_PG_MASK | CR0_NE_MASK
 		mov ebx, cr0
