@@ -83,3 +83,30 @@ struc idt_info_32_t
 endstruc
 
 %endif
+
+%define FPU_FEATURE_MASK		1
+%define VME_FEATURE_MASK		1<<1
+%define DE_FEATURE_MASK			1<<2
+%define PSE_FEATURE_MASK		1<<3
+%define PAE_FEATURE_MASK		1<<4
+%define APIC_FEATURE_MASK		1<<5
+%define MTRR_FEATURE_MASK		1<<6
+%define PGE_FEATURE_MASK		1<<7
+%define MCA_FEATURE_MASK		1<<8
+%define PAT_FEATURE_MASK		1<<9
+%define PSE36_FEATURE_MASK		1<<10
+%define ACPI_FEATURE_MASK		1<<11
+%define MMX_FEATURE_MASK		1<<12
+%define FXSR_FEATURE_MASK		1<<13
+%define SSE_FEATURE_MASK		1<<14
+%define SSE2_FEATURE_MASK		1<<15
+%define HTT_FEATURE_MASK		1<<16
+%define SSE3_FEATURE_MASK		1<<17
+%define VMX_FEATURE_MASK		1<<18
+%define SSSE3_FEATURE_MASK		1<<19
+%define PCID_FEATURE_MASK		1<<20
+%define DCA_FEATURE_MASK		1<<21
+%define SSE41_FEATURE_MASK		1<<22
+%define SSE42_FEATURE_MASK		1<<23
+%define X2ACPI_FEATURE_MASK		1<<24
+%define AES_FEATURE_MASK		1<<25

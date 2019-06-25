@@ -8,6 +8,10 @@ Extern definitions for assembly functions/vars
 #ifndef _ASM_H_
 #ifndef _HIGH_KERNEL_
 
+#include "common.h"
+
+#define IS_FEATURE_ENABLED(feature) ((os_enabled_features & (feature<<1)) >> feature)
+
 //Typedefs
 typedef struct { char data[32]; } os_cpuid_data_t;
 typedef struct { char data[112]; } os_multiboot_data_t;
@@ -26,6 +30,8 @@ extern int						os_kernel_page_directory;
 extern bool __attribute__((stdcall)) os_setup_idt();
 extern void __attribute__((stdcall)) os_setup_gdt();
 extern void __attribute__((stdcall)) os_select_segment(char segment_reg, short descriptor);
+
+extern unsigned int				os_enabled_features;
 
 #endif
 #endif

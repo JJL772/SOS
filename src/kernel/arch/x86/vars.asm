@@ -19,4 +19,4 @@ section .bootbss
 	os_multiboot_data:		resb	116 ; Multiboot data
 	os_multiboot_ptr:		resd	1	; Pointer to multiboot data
 	os_idt_descriptor:		resb	6 	; Descriptor to be loaded into IDTR
-	
+	os_enabled_features:	resd	1	; Enabled features by the OS

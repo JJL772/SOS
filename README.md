@@ -1,33 +1,10 @@
-# SOS
-Your computer will probably be yelling SOS once this OS starts up
-
-## What the heck is this?
-I was bored and decided that I wanted to try and write my own operating system. So that's basically what this is.
-## Should I use it?
-No. you really shouldnt. 
-I wrote this for kicks and for experience, it shouldnt be actually used on anyones computer, maybe in a VM, but thats it. 
-If youre new to this type of stuff and are interested in how operating systems work, you could take a look at the code! (At least when it's finished). I tried to make it as readable as possible and I commented the living hell out of it.
-
-## Design and stuff
-The OS has two components; kernelspace and userspace.
-The kernel contains two parts, the high kernel and the low kernel. The low kernel simply provies an abstraction layer for the hardware. The high kernel depends on the low kernel for hardware interaction.
-For each platform that is supported, a new low kernel must be written, properly providing hardware abstraction for the new platform.
-The usermode has stuff that I havent even planned out yet.
-
-## Folders
-
-
-### src/kernel/arch/ 
-The low kernel abstraction layers
-
-#### src/kernel/arch/x86/ 
-Abstraction layer for the x86 architecture
+# SimpleOS
 
 ## Building
-You will need to install the following packages: `python3 nasm clang gcc genisoimage binutils qemu make`
+`make TGT=<target>`
 
-## Notes
+Valid targets are:
 
-### Note on function handling
-Most functions in the high kernel are defined as variables, as this allows for the low kernel to do runtime-specific stuff.
-Long story short, if you want to support old processors AND support SIMD vectorization for things, you need a way to determine SIMD support during runtime.
+1. i386
+
+2. amd64
